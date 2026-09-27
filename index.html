@@ -13,6 +13,10 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
   
+  <!-- Google Firebase Realtime Database SDK (Canlı Eşitleme) -->
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+
   <script>
     tailwind.config = {
       theme: {
@@ -37,38 +41,26 @@
     /* PROFESYONEL PDF / YAZDIRMA (PRINT) KURALLARI            */
     /* ======================================================== */
     @media print {
-      /* 1. Sitenin üst navbarını, hafta çubuğunu ve web butonlarını gizle */
-      header,
-      section,
-      nav,
-      .no-print { 
+      header, section, nav, .no-print { 
         display: none !important; 
       }
-
-      /* 2. Sayfa marjları ve zemin temizliği */
       @page {
         size: A4 portrait;
         margin: 12mm 14mm 14mm 14mm;
       }
-
       body { 
         background: white !important; 
         color: #0f172a !important; 
         font-size: 10.5pt !important;
         line-height: 1.35 !important;
       }
-
       main {
         padding: 0 !important;
         margin: 0 !important;
         max-width: 100% !important;
         width: 100% !important;
       }
-
-      /* 3. Dış ana çerçevelerin sayfayı komple aşağı fırlatmasını önle */
-      .tab-page,
-      #tab-advisor,
-      #tab-advisor > div {
+      .tab-page, #tab-advisor, #tab-advisor > div {
         border: none !important;
         box-shadow: none !important;
         padding: 0 !important;
@@ -76,35 +68,26 @@
         break-inside: auto !important;
         page-break-inside: auto !important;
       }
-
-      /* 4. Tablo ve İçerik Hücrelerinin Bölünmesini Engelle */
       table {
         width: 100% !important;
         border-collapse: collapse !important;
       }
-
       tr {
         break-inside: avoid !important;
         page-break-inside: avoid !important;
       }
-
       th, td {
         padding: 6px 8px !important;
       }
-
-      /* 5. Finans, Lab Özeti ve Hoca Notu Kutularının Bölünmesini Engelle */
       .print-card-block {
         break-inside: avoid !important;
         page-break-inside: avoid !important;
         margin-bottom: 12px !important;
       }
-
-      /* 6. Renklerin ve arka planların PDF'e tam ve keskin çıkması */
       * {
         -webkit-print-color-adjust: exact !important;
         print-color-adjust: exact !important;
       }
-
       .overflow-x-auto {
         overflow: visible !important;
       }
@@ -140,10 +123,12 @@
         </div>
       </div>
 
-      <!-- Sağ Eylem Butonları & Otomatik Kayıt Göstergesi -->
+      <!-- Sağ Eylem Butonları & Canlı Bulut Durumu -->
       <div class="flex items-center gap-2 no-print">
-        <span id="saveStatusBadge" class="text-[11px] text-emerald-400 font-medium px-2 py-1 rounded bg-slate-800 border border-slate-700 transition opacity-0">
-          <i class="fa-solid fa-check mr-1"></i> Kaydedildi
+        <!-- Canlı Firebase Durum Rozeti -->
+        <span id="cloudStatusBadge" class="text-[11px] font-semibold px-2.5 py-1 rounded-lg bg-emerald-950/80 border border-emerald-500 text-emerald-300 flex items-center gap-1.5 transition">
+          <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+          <span>Canlı Bulut Senkronize</span>
         </span>
 
         <button onclick="printAdvisorReportDirectly()" class="px-2.5 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold rounded-lg border border-slate-700 transition flex items-center gap-1.5" title="Haftalık Raporu PDF Olarak İndir">
@@ -162,9 +147,9 @@
           <input type="file" id="importFileInput" accept=".json" onchange="importJSON(event)" class="hidden">
         </label>
 
-        <button onclick="saveProjectData(true)" class="px-3.5 py-1.5 bg-rose-600 hover:bg-rose-500 text-white text-xs font-bold rounded-lg shadow transition flex items-center gap-1.5">
-          <i class="fa-solid fa-floppy-disk"></i>
-          <span>Kaydet</span>
+        <button onclick="triggerManualSync()" class="px-3.5 py-1.5 bg-rose-600 hover:bg-rose-500 text-white text-xs font-bold rounded-lg shadow transition flex items-center gap-1.5">
+          <i class="fa-solid fa-cloud-arrow-up"></i>
+          <span>Kaydet & Eşitle</span>
         </button>
       </div>
 
@@ -198,9 +183,7 @@
           <span>Aktif Hafta:</span>
         </label>
         
-        <select id="weekSelector" onchange="onWeekChange(this.value)" class="bg-slate-100 border border-slate-300 font-bold text-slate-800 rounded-lg px-3 py-1 text-xs focus:ring-2 focus:ring-rose-500 focus:outline-none">
-          <!-- Dinamik doldurulacak -->
-        </select>
+        <select id="weekSelector" onchange="onWeekChange(this.value)" class="bg-slate-100 border border-slate-300 font-bold text-slate-800 rounded-lg px-3 py-1 text-xs focus:ring-2 focus:ring-rose-500 focus:outline-none"></select>
 
         <button onclick="promptAddNewWeek()" class="no-print px-2.5 py-1 bg-slate-100 hover:bg-rose-50 hover:text-rose-600 hover:border-rose-300 border border-slate-300 text-slate-700 font-bold rounded-lg transition flex items-center gap-1" title="Bir sonraki haftayı sıfır formlarla başlat">
           <i class="fa-solid fa-plus text-xs"></i>
@@ -227,13 +210,11 @@
   <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-5 flex-grow w-full">
     
     <div class="no-print border-b border-slate-200 mb-6 flex overflow-x-auto gap-2 text-sm font-semibold custom-scroll">
-      <!-- 1. Dashboard -->
       <button onclick="switchTab('dashboard')" id="btn-tab-dashboard" class="tab-btn px-4 py-2.5 border-b-2 border-rose-600 text-rose-600 flex items-center gap-2 whitespace-nowrap">
         <i class="fa-solid fa-table-columns"></i>
         <span>Konsolide Görev & Durum Panosu</span>
       </button>
 
-      <!-- 2. Kişi Sayfaları -->
       <button onclick="switchTab('elif')" id="btn-tab-elif" class="tab-btn px-4 py-2.5 border-b-2 border-transparent text-slate-500 hover:text-slate-700 flex items-center gap-2 whitespace-nowrap">
         <i class="fa-solid fa-user-shield text-rose-500"></i>
         <span>Elif Basmacı</span>
@@ -254,7 +235,6 @@
         <span>Talha Erol</span>
       </button>
 
-      <!-- 3. Yönetim & Takip Modülleri -->
       <button onclick="switchTab('budget')" id="btn-tab-budget" class="tab-btn px-4 py-2.5 border-b-2 border-transparent text-slate-500 hover:text-slate-700 flex items-center gap-2 whitespace-nowrap">
         <i class="fa-solid fa-wallet text-emerald-500"></i>
         <span>TÜBİTAK Bütçe & Satın Alma</span>
@@ -282,7 +262,7 @@
     </div>
 
     <!-- ======================================================== -->
-    <!-- TAB 1: KONSOLİDE DASHBOARD & DİNAMİK GÖREV PANOSU        -->
+    <!-- TAB 1: KONSOLİDE DASHBOARD                               -->
     <!-- ======================================================== -->
     <div id="tab-dashboard" class="tab-page space-y-6">
       
@@ -311,7 +291,7 @@
         </div>
       </div>
 
-      <!-- Proje Modeli ve Ortaklık Açıklama Kartı -->
+      <!-- Ortaklık Açıklama Kartı -->
       <div class="bg-gradient-to-r from-slate-900 to-slate-800 text-white rounded-2xl p-5 shadow-sm border border-slate-700 space-y-3">
         <div class="flex flex-wrap items-center justify-between gap-3">
           <div class="flex items-center gap-2">
@@ -725,7 +705,7 @@
         <div class="space-y-1">
           <div class="font-bold text-amber-950">TÜBİTAK 2209-A Fatura Kesim ve Harcama Kuralı (Yürütücü Elif Basmacı Dikkatine):</div>
           <p class="leading-relaxed">
-            Tüm malzeme alımları (A13 drone, filament, DAQ aparatları vb.) mutlaka resmi faturalı olmalıdır. Fatura alıcı bilgisi olarak <strong>Elif Basmacı (T.C. Kimlik No)</strong> yazılmalı, açıklama kısmına ise mümkünse <em>"TÜBİTAK 2209-A Projesi Kapsamında"</em> ibaresi eklenmelidir. Fiş/fatura asılları ve e-faturalar proje sonuç raporunda TÜBİTAK'a teslim edilecektir.
+            Tüm malzeme alımları mutlaka resmi faturalı olmalıdır. Fatura alıcı bilgisi olarak <strong>Elif Basmacı (T.C. Kimlik No)</strong> yazılmalı, açıklama kısmına ise mümkünse <em>"TÜBİTAK 2209-A Projesi Kapsamında"</em> ibaresi eklenmelidir. Fiş/fatura asılları ve e-faturalar proje sonuç raporunda TÜBİTAK'a teslim edilecektir.
           </p>
         </div>
       </div>
@@ -1021,9 +1001,93 @@
   </footer>
 
   <!-- ======================================================== -->
-  <!-- JAVASCRIPT: DİNAMİK YÖNETİM & FONKSİYONLAR              -->
+  <!-- JAVASCRIPT: GOOGLE FIREBASE CANLI SENKRONİZASYON MOTORU -->
   <!-- ======================================================== -->
   <script>
+    // Kullanıcının Realtime Database Adresi
+    const FIREBASE_DB_URL = "https://proje-takibi-2dff9-default-rtdb.firebaseio.com/";
+
+    let firebaseDb = null;
+    let dbRef = null;
+    let isRemoteUpdate = false;
+    let syncDebounceTimer = null;
+
+    function initFirebaseSync() {
+      try {
+        if (!firebase.apps.length) {
+          firebase.initializeApp({ databaseURL: FIREBASE_DB_URL });
+        }
+        firebaseDb = firebase.database();
+        dbRef = firebaseDb.ref("project_state");
+
+        // Canlı Dinleyici: Başka biri değişiklik yapınca tetiklenir
+        dbRef.on("value", (snapshot) => {
+          const remoteData = snapshot.val();
+          if (remoteData && remoteData.weeks) {
+            isRemoteUpdate = true;
+            projectState = remoteData;
+            localStorage.setItem('tubitak_2209_v9_state', JSON.stringify(projectState));
+            
+            // Aktif olarak bir alana yazı yazılmıyorsa UI'ı tazele
+            const activeEl = document.activeElement;
+            const isTyping = activeEl && (activeEl.tagName === 'INPUT' || activeEl.tagName === 'TEXTAREA');
+            if (!isTyping) {
+              renderWeekSelector();
+              loadActiveWeek();
+              renderBudgetCategoriesSelect();
+              renderBudgetModule();
+              renderRoadmapModule();
+              renderLabsModule();
+              renderResourcesModule();
+              updateDashboardWidgets();
+            } else {
+              renderDashboardCards();
+              renderTasksTable();
+              renderAdvisorTable();
+              updateDashboardWidgets();
+            }
+
+            const badge = document.getElementById('cloudStatusBadge');
+            badge.innerHTML = `<span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span><span>Canlı Bulut Senkronize</span>`;
+            badge.className = "text-[11px] font-semibold px-2.5 py-1 rounded-lg bg-emerald-950/80 border border-emerald-500 text-emerald-300 flex items-center gap-1.5 transition";
+
+            setTimeout(() => { isRemoteUpdate = false; }, 300);
+          }
+        });
+      } catch (err) {
+        console.warn("Firebase bağlantı hatası:", err);
+        const badge = document.getElementById('cloudStatusBadge');
+        badge.innerHTML = `<span class="w-2 h-2 rounded-full bg-amber-400"></span><span>Yerel Mod (Bağlantı Bekleniyor)</span>`;
+        badge.className = "text-[11px] font-semibold px-2.5 py-1 rounded-lg bg-amber-950/80 border border-amber-500 text-amber-300 flex items-center gap-1.5 transition";
+      }
+    }
+
+    function pushDataToFirebase() {
+      if (isRemoteUpdate || !dbRef) return;
+      clearTimeout(syncDebounceTimer);
+      syncDebounceTimer = setTimeout(() => {
+        try {
+          dbRef.set(projectState);
+        } catch(e) {
+          console.error("Firebase'e yazılamadı:", e);
+        }
+      }, 500);
+    }
+
+    function triggerManualSync() {
+      saveProjectData(false);
+      if (dbRef) {
+        dbRef.set(projectState).then(() => {
+          alert("Tüm veriler Google Firebase bulutuna anında eşitlendi! Ekip arkadaşlarınızın ekranında güncellendi.");
+        }).catch(() => {
+          alert("Buluta gönderilirken bir sorun oluştu. Yerel kopyanız güvende.");
+        });
+      } else {
+        alert("Tüm değişiklikler yerel belleğe kaydedildi!");
+      }
+    }
+
+    // Başlangıç Veri Modeli
     const initialProjectState = {
       activeWeekKey: "w1",
       budget: {
@@ -1174,20 +1238,7 @@
       if (stored) {
         try { projectState = JSON.parse(stored); } catch(e) { projectState = initialProjectState; }
       } else {
-        const oldStored = localStorage.getItem('tubitak_2209_v8_state') || localStorage.getItem('tubitak_2209_v7_state') || localStorage.getItem('tubitak_2209_v6_state');
-        if (oldStored) {
-          try {
-            const parsedOld = JSON.parse(oldStored);
-            projectState = Object.assign({}, initialProjectState, parsedOld);
-            if (!projectState.budget) projectState.budget = initialProjectState.budget;
-            if (!projectState.budget.categories) projectState.budget.categories = initialProjectState.budget.categories;
-            if (!projectState.roadmap) projectState.roadmap = initialProjectState.roadmap;
-            if (!projectState.labs) projectState.labs = initialProjectState.labs;
-            if (!projectState.resources) projectState.resources = initialProjectState.resources;
-          } catch(e) { projectState = initialProjectState; }
-        } else {
-          projectState = initialProjectState;
-        }
+        projectState = initialProjectState;
       }
 
       if (!projectState.weeks || Object.keys(projectState.weeks).length === 0) projectState.weeks = initialProjectState.weeks;
@@ -1203,14 +1254,14 @@
       renderLabsModule();
       renderResourcesModule();
       updateDashboardWidgets();
+
+      // Firebase canlı dinleyicisini başlat
+      initFirebaseSync();
     }
 
-    // Doğrudan Danışman Raporunu Yazdırma
     function printAdvisorReportDirectly() {
       switchTab('advisor');
-      setTimeout(() => {
-        window.print();
-      }, 150);
+      setTimeout(() => { window.print(); }, 150);
     }
 
     function renderWeekSelector() {
@@ -1777,8 +1828,8 @@
       document.getElementById('budgetRemainingDisplay').innerText = `₺${remaining.toLocaleString('tr-TR', { minimumFractionDigits: 2 })}`;
       document.getElementById('budgetSpentPercent').innerText = `%${percent} kullanıldı`;
 
-      document.getElementById('dash-total-grant').innerText = `₺${totalGrant.toLocaleString('tr-TR', { minimumFractionDigits: 2 })}`;
-      document.getElementById('dash-remaining-budget').innerText = `₺${remaining.toLocaleString('tr-TR', { minimumFractionDigits: 2 })}`;
+      document.getElementById('dash-total-grant').innerText = `₺${totalGrant.toLocaleString('tr-TR')}`;
+      document.getElementById('dash-remaining-budget').innerText = `₺${remaining.toLocaleString('tr-TR')}`;
     }
 
     function toggleExpenseForm() {
@@ -2428,11 +2479,9 @@
 
     function saveProjectData(showAlert = false) {
       localStorage.setItem('tubitak_2209_v9_state', JSON.stringify(projectState));
-      const badge = document.getElementById('saveStatusBadge');
-      badge.style.opacity = "1";
-      setTimeout(() => { badge.style.opacity = "0"; }, 1500);
+      pushDataToFirebase();
 
-      if (showAlert) alert("Tüm değişiklikler başarıyla kaydedildi!");
+      if (showAlert) alert("Tüm değişiklikler başarıyla kaydedildi ve buluta gönderildi!");
     }
 
     function switchTab(tabId) {
@@ -2473,7 +2522,7 @@
           const parsed = JSON.parse(e.target.result);
           if (parsed && parsed.weeks) {
             projectState = parsed;
-            saveProjectData(false);
+            saveProjectData(true);
             renderWeekSelector();
             loadActiveWeek();
             renderBudgetCategoriesSelect();
@@ -2481,7 +2530,7 @@
             renderRoadmapModule();
             renderLabsModule();
             renderResourcesModule();
-            alert("Proje yedeği başarıyla yüklendi!");
+            alert("Proje yedeği yüklendi ve buluta aktarıldı!");
           } else { alert("Geçersiz yedek dosyası!"); }
         } catch(err) { alert("Dosya okunurken bir hata oluştu!"); }
       };
