@@ -1,0 +1,2494 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TÜBİTAK 2209-A & Bitirme Projesi Yönetim Portalı</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+  
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+            mono: ['"JetBrains Mono"', 'monospace'],
+          },
+          colors: {
+            brand: {
+              red: '#e11d48',
+              dark: '#0f172a',
+              card: '#ffffff'
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    /* ======================================================== */
+    /* PROFESYONEL PDF / YAZDIRMA (PRINT) KURALLARI            */
+    /* ======================================================== */
+    @media print {
+      /* 1. Sitenin üst navbarını, hafta çubuğunu ve web butonlarını gizle */
+      header,
+      section,
+      nav,
+      .no-print { 
+        display: none !important; 
+      }
+
+      /* 2. Sayfa marjları ve zemin temizliği */
+      @page {
+        size: A4 portrait;
+        margin: 12mm 14mm 14mm 14mm;
+      }
+
+      body { 
+        background: white !important; 
+        color: #0f172a !important; 
+        font-size: 10.5pt !important;
+        line-height: 1.35 !important;
+      }
+
+      main {
+        padding: 0 !important;
+        margin: 0 !important;
+        max-width: 100% !important;
+        width: 100% !important;
+      }
+
+      /* 3. Dış ana çerçevelerin sayfayı komple aşağı fırlatmasını önle */
+      .tab-page,
+      #tab-advisor,
+      #tab-advisor > div {
+        border: none !important;
+        box-shadow: none !important;
+        padding: 0 !important;
+        margin: 0 !important;
+        break-inside: auto !important;
+        page-break-inside: auto !important;
+      }
+
+      /* 4. Tablo ve İçerik Hücrelerinin Bölünmesini Engelle */
+      table {
+        width: 100% !important;
+        border-collapse: collapse !important;
+      }
+
+      tr {
+        break-inside: avoid !important;
+        page-break-inside: avoid !important;
+      }
+
+      th, td {
+        padding: 6px 8px !important;
+      }
+
+      /* 5. Finans, Lab Özeti ve Hoca Notu Kutularının Bölünmesini Engelle */
+      .print-card-block {
+        break-inside: avoid !important;
+        page-break-inside: avoid !important;
+        margin-bottom: 12px !important;
+      }
+
+      /* 6. Renklerin ve arka planların PDF'e tam ve keskin çıkması */
+      * {
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+      }
+
+      .overflow-x-auto {
+        overflow: visible !important;
+      }
+    }
+
+    .custom-scroll::-webkit-scrollbar { width: 6px; height: 6px; }
+    .custom-scroll::-webkit-scrollbar-track { background: #f8fafc; }
+    .custom-scroll::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-800 font-sans min-h-screen flex flex-col custom-scroll">
+
+  <!-- ======================================================== -->
+  <!-- ÜST NAVBAR & SİSTEM KONTROLLERİ                          -->
+  <!-- ======================================================== -->
+  <header class="bg-slate-900 text-white sticky top-0 z-50 shadow-md border-b border-slate-800">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 flex flex-wrap justify-between items-center gap-3">
+      
+      <!-- Sol Logo & Proje Başlığı -->
+      <div class="flex items-center space-x-3">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-rose-600 via-rose-500 to-amber-500 flex items-center justify-center font-bold text-white shadow">
+          <i class="fa-solid fa-rocket"></i>
+        </div>
+        <div>
+          <div class="flex items-center gap-2 flex-wrap">
+            <span class="bg-rose-500/20 text-rose-300 text-[11px] px-2 py-0.5 rounded font-mono font-bold tracking-wide">TÜBİTAK 2209-A</span>
+            <span class="bg-amber-500/20 text-amber-300 text-[11px] px-2 py-0.5 rounded font-mono font-bold tracking-wide">BİTİRME PROJESİ ORTAK ÇALIŞMA</span>
+            <span class="text-[11px] text-slate-400 hidden sm:inline">GTÜ Makine Mühendisliği</span>
+          </div>
+          <h1 class="text-sm sm:text-base font-bold text-white tracking-tight leading-snug">
+            Quad-Rotor Titreşim Azaltımı için Bant Aralığı Odaklı Metamalzeme Bağlantı Elemanı
+          </h1>
+        </div>
+      </div>
+
+      <!-- Sağ Eylem Butonları & Otomatik Kayıt Göstergesi -->
+      <div class="flex items-center gap-2 no-print">
+        <span id="saveStatusBadge" class="text-[11px] text-emerald-400 font-medium px-2 py-1 rounded bg-slate-800 border border-slate-700 transition opacity-0">
+          <i class="fa-solid fa-check mr-1"></i> Kaydedildi
+        </span>
+
+        <button onclick="printAdvisorReportDirectly()" class="px-2.5 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold rounded-lg border border-slate-700 transition flex items-center gap-1.5" title="Haftalık Raporu PDF Olarak İndir">
+          <i class="fa-solid fa-file-pdf text-rose-400"></i>
+          <span class="hidden md:inline">Rapor Yazdır / PDF</span>
+        </button>
+
+        <button onclick="exportJSON()" class="px-2.5 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold rounded-lg border border-slate-700 transition flex items-center gap-1.5" title="Tüm projeyi tek dosya olarak bilgisayarına kaydet">
+          <i class="fa-solid fa-download text-blue-400"></i>
+          <span class="hidden md:inline">Yedek İndir</span>
+        </button>
+
+        <label class="px-2.5 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold rounded-lg border border-slate-700 transition flex items-center gap-1.5 cursor-pointer" title="Daha önce indirilen yedeği geri yükle">
+          <i class="fa-solid fa-upload text-amber-400"></i>
+          <span class="hidden md:inline">Yükle</span>
+          <input type="file" id="importFileInput" accept=".json" onchange="importJSON(event)" class="hidden">
+        </label>
+
+        <button onclick="saveProjectData(true)" class="px-3.5 py-1.5 bg-rose-600 hover:bg-rose-500 text-white text-xs font-bold rounded-lg shadow transition flex items-center gap-1.5">
+          <i class="fa-solid fa-floppy-disk"></i>
+          <span>Kaydet</span>
+        </button>
+      </div>
+
+    </div>
+  </header>
+
+  <!-- ======================================================== -->
+  <!-- HAFTALIK YÖNETİM & DÖNEM GEÇİŞ ÇUBUĞU                    -->
+  <!-- ======================================================== -->
+  <section class="bg-white border-b border-slate-200 shadow-sm">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-2.5 flex flex-wrap items-center justify-between gap-3 text-xs">
+      
+      <!-- Proje Kapsamı ve Görev Yapısı Bilgilendirmesi -->
+      <div class="flex items-center gap-2.5 flex-wrap">
+        <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200 font-bold">
+          <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+          Ortak Süreç Başladı
+        </span>
+        <span class="text-slate-400 hidden sm:inline">|</span>
+        <span class="text-slate-600"><strong>Danışman:</strong> Dr. Öğr. Üyesi Saeed Lotfan</span>
+        <span class="text-slate-400 hidden sm:inline">|</span>
+        <span class="text-rose-700 font-semibold"><strong>2209-A Yürütücüsü:</strong> Elif Basmacı</span>
+        <span class="text-slate-400 hidden md:inline">|</span>
+        <span class="text-amber-700 font-semibold hidden md:inline"><strong>Bitirme Ekibi:</strong> Emre Özel, Tunahan Dündar, Talha Erol</span>
+      </div>
+
+      <!-- Hafta Seçici & Yeni Hafta / Temizle / Sil Butonları -->
+      <div class="flex items-center gap-2">
+        <label for="weekSelector" class="font-bold text-slate-700 flex items-center gap-1">
+          <i class="fa-solid fa-calendar-week text-rose-500"></i>
+          <span>Aktif Hafta:</span>
+        </label>
+        
+        <select id="weekSelector" onchange="onWeekChange(this.value)" class="bg-slate-100 border border-slate-300 font-bold text-slate-800 rounded-lg px-3 py-1 text-xs focus:ring-2 focus:ring-rose-500 focus:outline-none">
+          <!-- Dinamik doldurulacak -->
+        </select>
+
+        <button onclick="promptAddNewWeek()" class="no-print px-2.5 py-1 bg-slate-100 hover:bg-rose-50 hover:text-rose-600 hover:border-rose-300 border border-slate-300 text-slate-700 font-bold rounded-lg transition flex items-center gap-1" title="Bir sonraki haftayı sıfır formlarla başlat">
+          <i class="fa-solid fa-plus text-xs"></i>
+          <span>Yeni Hafta</span>
+        </button>
+
+        <button onclick="clearCurrentWeekForms()" class="no-print px-2.5 py-1 bg-slate-100 hover:bg-amber-50 hover:text-amber-700 hover:border-amber-300 border border-slate-300 text-slate-600 font-semibold rounded-lg transition flex items-center gap-1" title="Aktif haftadaki tüm kişi formlarını temizle">
+          <i class="fa-solid fa-eraser text-xs text-amber-500"></i>
+          <span>Haftayı Temizle</span>
+        </button>
+
+        <button onclick="deleteCurrentWeek()" class="no-print px-2.5 py-1 bg-slate-100 hover:bg-rose-50 hover:text-rose-700 hover:border-rose-300 border border-slate-300 text-slate-600 font-semibold rounded-lg transition flex items-center gap-1" title="Aktif haftayı sistemden tamamen sil">
+          <i class="fa-solid fa-trash-can text-xs text-rose-500"></i>
+          <span>Haftayı Sil</span>
+        </button>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ======================================================== -->
+  <!-- ANA SEKME MENÜSÜ                                         -->
+  <!-- ======================================================== -->
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-5 flex-grow w-full">
+    
+    <div class="no-print border-b border-slate-200 mb-6 flex overflow-x-auto gap-2 text-sm font-semibold custom-scroll">
+      <!-- 1. Dashboard -->
+      <button onclick="switchTab('dashboard')" id="btn-tab-dashboard" class="tab-btn px-4 py-2.5 border-b-2 border-rose-600 text-rose-600 flex items-center gap-2 whitespace-nowrap">
+        <i class="fa-solid fa-table-columns"></i>
+        <span>Konsolide Görev & Durum Panosu</span>
+      </button>
+
+      <!-- 2. Kişi Sayfaları -->
+      <button onclick="switchTab('elif')" id="btn-tab-elif" class="tab-btn px-4 py-2.5 border-b-2 border-transparent text-slate-500 hover:text-slate-700 flex items-center gap-2 whitespace-nowrap">
+        <i class="fa-solid fa-user-shield text-rose-500"></i>
+        <span>Elif Basmacı</span>
+      </button>
+
+      <button onclick="switchTab('emre')" id="btn-tab-emre" class="tab-btn px-4 py-2.5 border-b-2 border-transparent text-slate-500 hover:text-slate-700 flex items-center gap-2 whitespace-nowrap">
+        <i class="fa-solid fa-user-gear text-blue-500"></i>
+        <span>Emre Özel</span>
+      </button>
+
+      <button onclick="switchTab('tunahan')" id="btn-tab-tunahan" class="tab-btn px-4 py-2.5 border-b-2 border-transparent text-slate-500 hover:text-slate-700 flex items-center gap-2 whitespace-nowrap">
+        <i class="fa-solid fa-user-pen text-emerald-500"></i>
+        <span>Tunahan Dündar</span>
+      </button>
+
+      <button onclick="switchTab('talha')" id="btn-tab-talha" class="tab-btn px-4 py-2.5 border-b-2 border-transparent text-slate-500 hover:text-slate-700 flex items-center gap-2 whitespace-nowrap">
+        <i class="fa-solid fa-user-gear text-amber-500"></i>
+        <span>Talha Erol</span>
+      </button>
+
+      <!-- 3. Yönetim & Takip Modülleri -->
+      <button onclick="switchTab('budget')" id="btn-tab-budget" class="tab-btn px-4 py-2.5 border-b-2 border-transparent text-slate-500 hover:text-slate-700 flex items-center gap-2 whitespace-nowrap">
+        <i class="fa-solid fa-wallet text-emerald-500"></i>
+        <span>TÜBİTAK Bütçe & Satın Alma</span>
+      </button>
+
+      <button onclick="switchTab('roadmap')" id="btn-tab-roadmap" class="tab-btn px-4 py-2.5 border-b-2 border-transparent text-slate-500 hover:text-slate-700 flex items-center gap-2 whitespace-nowrap">
+        <i class="fa-solid fa-timeline text-indigo-500"></i>
+        <span>12 Aylık Zaman Çizelgesi (Gantt)</span>
+      </button>
+
+      <button onclick="switchTab('logbook')" id="btn-tab-logbook" class="tab-btn px-4 py-2.5 border-b-2 border-transparent text-slate-500 hover:text-slate-700 flex items-center gap-2 whitespace-nowrap">
+        <i class="fa-solid fa-flask-vial text-cyan-600"></i>
+        <span>Deney & Laboratuvar Kayıt Defteri</span>
+      </button>
+
+      <button onclick="switchTab('resources')" id="btn-tab-resources" class="tab-btn px-4 py-2.5 border-b-2 border-transparent text-slate-500 hover:text-slate-700 flex items-center gap-2 whitespace-nowrap">
+        <i class="fa-solid fa-folder-tree text-amber-500"></i>
+        <span>Ortak Drive, CAD & Kod Paneli</span>
+      </button>
+
+      <button onclick="switchTab('advisor')" id="btn-tab-advisor" class="tab-btn px-4 py-2.5 border-b-2 border-transparent text-slate-500 hover:text-slate-700 flex items-center gap-2 whitespace-nowrap">
+        <i class="fa-solid fa-graduation-cap text-purple-600"></i>
+        <span>Danışman / Jüri Rapor Çıktısı</span>
+      </button>
+    </div>
+
+    <!-- ======================================================== -->
+    <!-- TAB 1: KONSOLİDE DASHBOARD & DİNAMİK GÖREV PANOSU        -->
+    <!-- ======================================================== -->
+    <div id="tab-dashboard" class="tab-page space-y-6">
+      
+      <!-- Hızlı Durum Widget'ları -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm flex items-center justify-between">
+          <div>
+            <div class="text-[11px] font-bold text-slate-500 uppercase tracking-wider">TÜBİTAK Kalan Bütçe</div>
+            <div class="text-2xl font-extrabold text-emerald-600 mt-1" id="dash-remaining-budget">₺6,530.00</div>
+            <div class="text-xs text-slate-400 mt-0.5">Toplam Hibe: <span id="dash-total-grant">₺9,000.00</span></div>
+          </div>
+          <div class="w-12 h-12 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center text-xl shadow-inner">
+            <i class="fa-solid fa-coins"></i>
+          </div>
+        </div>
+
+        <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm flex items-center justify-between">
+          <div>
+            <div class="text-[11px] font-bold text-slate-500 uppercase tracking-wider">Bu Haftanın Görevleri</div>
+            <div class="text-2xl font-extrabold text-rose-600 mt-1" id="dash-tasks-count">5 Görev</div>
+            <div class="text-xs text-slate-400 mt-0.5" id="dash-tasks-pending">3 bekleyen, 2 devam eden</div>
+          </div>
+          <div class="w-12 h-12 rounded-2xl bg-rose-50 text-rose-600 flex items-center justify-center text-xl shadow-inner">
+            <i class="fa-solid fa-list-check"></i>
+          </div>
+        </div>
+      </div>
+
+      <!-- Proje Modeli ve Ortaklık Açıklama Kartı -->
+      <div class="bg-gradient-to-r from-slate-900 to-slate-800 text-white rounded-2xl p-5 shadow-sm border border-slate-700 space-y-3">
+        <div class="flex flex-wrap items-center justify-between gap-3">
+          <div class="flex items-center gap-2">
+            <span class="bg-rose-500 text-white text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded">Proje Yapısı & Kapsam</span>
+            <h2 class="text-base font-bold text-white" id="dashboard-week-title">Hafta 1: Proje Kabulü & Görev Paylaşımı</h2>
+          </div>
+          <span class="text-xs font-mono text-amber-300 bg-amber-500/10 px-2.5 py-1 rounded border border-amber-500/30">
+            2209-A & Bitirme Ortak Araştırma Grubu
+          </span>
+        </div>
+        
+        <p class="text-xs text-slate-300 leading-relaxed max-w-4xl">
+          Bu araştırma, <strong>TÜBİTAK 2209-A</strong> desteği ve <strong>GTÜ Makine Bitirme Projesi</strong> kapsamını ortak bir çalışma havuzunda birleştirmektedir. Elif Basmacı TÜBİTAK 2209-A resmi yürütücüsü olarak genel koordinasyonu üstlenirken; Emre Özel, Tunahan Dündar ve Talha Erol bitirme tezi yükümlülüklerini aynı deneysel ve sayısal altyapı üzerinden ortak yürütmektedir.
+        </p>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1 text-xs">
+          <div class="bg-slate-800/80 p-2.5 rounded-xl border border-slate-700 flex items-center gap-2.5">
+            <span class="w-2.5 h-2.5 rounded-full bg-rose-500"></span>
+            <div>
+              <span class="font-bold text-rose-300">TÜBİTAK 2209-A Ekibi:</span>
+              <span class="text-slate-300 ml-1">Elif Basmacı (Yürütücü), Emre Özel, Tunahan Dündar</span>
+            </div>
+          </div>
+          <div class="bg-slate-800/80 p-2.5 rounded-xl border border-slate-700 flex items-center gap-2.5">
+            <span class="w-2.5 h-2.5 rounded-full bg-amber-500"></span>
+            <div>
+              <span class="font-bold text-amber-300">Bitirme Projesi Ekibi:</span>
+              <span class="text-slate-300 ml-1">Emre Özel, Tunahan Dündar, Talha Erol</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Ekip Üyelerinin Haftalık Durum Kartları -->
+      <div>
+        <div class="flex items-center justify-between mb-3">
+          <h3 class="text-sm font-bold text-slate-800 flex items-center gap-2">
+            <i class="fa-solid fa-users text-rose-600"></i>
+            <span>Ekip Üyeleri Haftalık Özet Kartları</span>
+          </h3>
+          <span class="text-xs text-slate-500">Kişi sekmelerinden girilen veriler anlık buraya yansır</span>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4" id="dashboard-members-grid"></div>
+      </div>
+
+      <!-- Ortak Aksiyon & Görev Listesi -->
+      <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-5 space-y-4">
+        <div class="flex flex-wrap items-center justify-between gap-3 pb-3 border-b border-slate-100">
+          <div>
+            <h3 class="text-sm font-bold text-slate-900 flex items-center gap-2">
+              <i class="fa-solid fa-list-check text-blue-600"></i>
+              <span>Bu Haftanın Ortak Aksiyon & Görev Listesi</span>
+            </h3>
+            <p class="text-xs text-slate-500">Toplantıda kararlaştırılan somut görevleri ekleyin, kişilere atayın ve tamamlandıkça işaretleyin.</p>
+          </div>
+          <div class="flex items-center gap-2 no-print">
+            <button onclick="toggleQuickTaskForm()" class="px-3 py-1.5 bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold rounded-lg transition flex items-center gap-1.5">
+              <i class="fa-solid fa-plus"></i>
+              <span>Yeni Görev Ekle</span>
+            </button>
+          </div>
+        </div>
+
+        <div id="quickTaskForm" class="bg-slate-50 p-3.5 rounded-xl border border-slate-200 no-print space-y-3">
+          <div class="grid grid-cols-1 sm:grid-cols-12 gap-2 text-xs">
+            <input type="text" id="newTaskTitle" placeholder="Görev başlığı (örn: A13 fırçasız drone siparişinin verilmesi)..." class="sm:col-span-6 px-3 py-2 bg-white border border-slate-300 rounded-lg focus:ring-2 focus:ring-rose-500 focus:outline-none">
+            <select id="newTaskAssignee" class="sm:col-span-3 px-3 py-2 bg-white border border-slate-300 rounded-lg focus:ring-2 focus:ring-rose-500 focus:outline-none font-medium">
+              <option value="Elif">Sorumlu: Elif Basmacı</option>
+              <option value="Emre">Sorumlu: Emre Özel</option>
+              <option value="Tunahan">Sorumlu: Tunahan Dündar</option>
+              <option value="Talha">Sorumlu: Talha Erol</option>
+              <option value="Tüm Ekip">Sorumlu: Tüm Ekip</option>
+            </select>
+            <select id="newTaskStatus" class="sm:col-span-2 px-3 py-2 bg-white border border-slate-300 rounded-lg focus:ring-2 focus:ring-rose-500 focus:outline-none font-medium">
+              <option value="todo">Beklemede</option>
+              <option value="doing">Devam Ediyor</option>
+              <option value="done">Tamamlandı</option>
+            </select>
+            <button onclick="addNewTaskFromForm()" class="sm:col-span-1 bg-rose-600 hover:bg-rose-500 text-white font-bold rounded-lg py-2 transition flex items-center justify-center">
+              <i class="fa-solid fa-check"></i>
+            </button>
+          </div>
+        </div>
+
+        <div class="overflow-x-auto">
+          <table class="w-full text-left text-xs">
+            <thead>
+              <tr class="bg-slate-50 text-slate-600 font-bold border-b border-slate-200">
+                <th class="p-2.5 w-10 text-center">Durum</th>
+                <th class="p-2.5">Görev Açıklaması</th>
+                <th class="p-2.5 w-36">Sorumlu</th>
+                <th class="p-2.5 w-28">Aşama</th>
+                <th class="p-2.5 w-16 text-center no-print">İşlem</th>
+              </tr>
+            </thead>
+            <tbody id="tasksTableBody" class="divide-y divide-slate-100"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Toplantı Karar Defteri -->
+      <div class="bg-slate-900 text-white rounded-2xl p-5 shadow-sm space-y-3">
+        <div class="flex flex-wrap items-center justify-between pb-2 border-b border-slate-800 gap-2">
+          <div class="flex items-center gap-2">
+            <h3 class="text-xs font-bold text-amber-400 uppercase tracking-wider flex items-center gap-2">
+              <i class="fa-solid fa-pen-to-square"></i>
+              <span>Toplantı Karar Defteri & Haftalık Notlar</span>
+            </h3>
+            <span class="text-[11px] text-slate-400">Bu haftanın resmi kararları</span>
+          </div>
+
+          <div class="flex items-center gap-2 no-print">
+            <button onclick="generateMeetingAgenda()" class="px-2.5 py-1 bg-indigo-600 hover:bg-indigo-500 text-white text-[11px] font-bold rounded-lg transition flex items-center gap-1.5 shadow" title="Tamamlanmamış görevleri ve engelleri tarayarak otomatik gündem oluştur">
+              <i class="fa-solid fa-wand-magic-sparkles text-amber-300"></i>
+              <span>Gündem Çıkar (Oto)</span>
+            </button>
+            <button onclick="copyMeetingSummary()" class="px-2.5 py-1 bg-slate-800 hover:bg-slate-700 text-slate-200 text-[11px] font-semibold rounded-lg border border-slate-700 transition flex items-center gap-1.5" title="WhatsApp veya E-posta için biçimlendirilmiş özet metni kopyalar">
+              <i class="fa-brands fa-whatsapp text-emerald-400"></i>
+              <span>Özeti Kopyala</span>
+            </button>
+          </div>
+        </div>
+        <textarea id="weekDecisionsInput" oninput="saveCurrentWeekMeta()" rows="4" class="w-full bg-slate-800 text-slate-100 text-xs rounded-xl p-3 border border-slate-700 focus:ring-2 focus:ring-rose-500 focus:outline-none custom-scroll leading-relaxed" placeholder="Bu haftaki toplantıda alınan kararları buraya yazın veya yukarıdaki 'Gündem Çıkar' butonunu kullanın..."></textarea>
+      </div>
+
+    </div>
+
+    <!-- ======================================================== -->
+    <!-- TAB 2: ELİF BASMACI SEKME                                -->
+    <!-- ======================================================== -->
+    <div id="tab-elif" class="tab-page hidden space-y-5">
+      <div class="bg-white rounded-2xl border border-rose-100 shadow-sm p-6 border-l-4 border-l-rose-500 space-y-4">
+        <div class="flex flex-wrap items-center justify-between gap-3 pb-3 border-b border-slate-100">
+          <div>
+            <span class="text-[11px] font-mono font-bold text-rose-600 uppercase tracking-wider">TÜBİTAK 2209-A Yürütücüsü & Takım Lideri</span>
+            <h2 class="text-lg font-bold text-slate-900 flex items-center gap-2">
+              <i class="fa-solid fa-user-shield text-rose-500"></i>
+              <span>Elif Basmacı - Çalışma Sayfası</span>
+            </h2>
+          </div>
+          <div class="text-xs bg-rose-50 text-rose-700 px-3 py-1 rounded-full font-semibold">
+            TÜBİTAK 2209-A Resmi Yürütücüsü
+          </div>
+        </div>
+
+        <div class="p-3 bg-slate-50 rounded-xl border border-slate-200 space-y-1">
+          <label class="text-xs font-bold text-slate-700 flex items-center gap-1.5">
+            <i class="fa-solid fa-id-badge text-rose-500"></i>
+            <span>Görev / Odak Alanı Tanımı:</span>
+            <span class="text-[10px] bg-slate-200 text-slate-600 px-1.5 py-0.5 rounded font-medium">Toplantıda düzenlenebilir</span>
+          </label>
+          <input type="text" id="role-elif" oninput="saveMemberData('elif')" class="w-full text-xs font-semibold text-slate-800 bg-white border border-slate-200 rounded-lg p-2 focus:ring-2 focus:ring-rose-500 focus:outline-none">
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div class="space-y-1.5">
+            <label class="text-xs font-bold text-slate-700 flex items-center gap-1.5 uppercase tracking-wider">
+              <i class="fa-solid fa-circle-check text-emerald-500"></i>
+              <span>Bu Hafta Ne Yaptım? (Tamamlananlar)</span>
+            </label>
+            <textarea id="done-elif" oninput="saveMemberData('elif')" rows="6" class="w-full text-xs p-3 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-rose-500 focus:outline-none leading-relaxed" placeholder="Bu hafta tamamladığınız çalışmaları buraya yazın..."></textarea>
+          </div>
+
+          <div class="space-y-1.5">
+            <label class="text-xs font-bold text-slate-700 flex items-center gap-1.5 uppercase tracking-wider">
+              <i class="fa-solid fa-bullseye text-blue-500"></i>
+              <span>Gelecek Hafta Ne Yapmayı Planlıyorum? (Hedefler)</span>
+            </label>
+            <textarea id="todo-elif" oninput="saveMemberData('elif')" rows="6" class="w-full text-xs p-3 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-rose-500 focus:outline-none leading-relaxed" placeholder="Önümüzdeki hafta için hedeflerinizi buraya yazın..."></textarea>
+          </div>
+
+          <div class="space-y-1.5">
+            <label class="text-xs font-bold text-slate-700 flex items-center gap-1.5 uppercase tracking-wider">
+              <i class="fa-solid fa-triangle-exclamation text-amber-500"></i>
+              <span>Karşılaşılan Engeller / Destek Gerekenler</span>
+            </label>
+            <textarea id="blockers-elif" oninput="saveMemberData('elif')" rows="3" class="w-full text-xs p-3 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-rose-500 focus:outline-none leading-relaxed" placeholder="Karşılaştığınız engeller veya ihtiyaçlar..."></textarea>
+          </div>
+
+          <div class="space-y-1.5">
+            <label class="text-xs font-bold text-slate-700 flex items-center gap-1.5 uppercase tracking-wider">
+              <i class="fa-solid fa-link text-slate-500"></i>
+              <span>Notlar, İlgili Linkler & Satın Alma Detayları</span>
+            </label>
+            <textarea id="notes-elif" oninput="saveMemberData('elif')" rows="3" class="w-full text-xs p-3 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-rose-500 focus:outline-none leading-relaxed" placeholder="Notlar, fatura detayları ve linkler..."></textarea>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ======================================================== -->
+    <!-- TAB 3: EMRE ÖZEL SEKME                                   -->
+    <!-- ======================================================== -->
+    <div id="tab-emre" class="tab-page hidden space-y-5">
+      <div class="bg-white rounded-2xl border border-blue-100 shadow-sm p-6 border-l-4 border-l-blue-500 space-y-4">
+        <div class="flex flex-wrap items-center justify-between gap-3 pb-3 border-b border-slate-100">
+          <div>
+            <span class="text-[11px] font-mono font-bold text-blue-600 uppercase tracking-wider">TÜBİTAK 2209-A & Bitirme Ekip Üyesi</span>
+            <h2 class="text-lg font-bold text-slate-900 flex items-center gap-2">
+              <i class="fa-solid fa-user-gear text-blue-500"></i>
+              <span>Emre Özel - Çalışma Sayfası</span>
+            </h2>
+          </div>
+          <div class="text-xs bg-blue-50 text-blue-700 px-3 py-1 rounded-full font-semibold">
+            2209-A Araştırmacı & Bitirme Projesi Üyesi
+          </div>
+        </div>
+
+        <div class="p-3 bg-slate-50 rounded-xl border border-slate-200 space-y-1">
+          <label class="text-xs font-bold text-slate-700 flex items-center gap-1.5">
+            <i class="fa-solid fa-id-badge text-blue-500"></i>
+            <span>Görev / Odak Alanı Tanımı:</span>
+            <span class="text-[10px] bg-slate-200 text-slate-600 px-1.5 py-0.5 rounded font-medium">Toplantıda düzenlenebilir</span>
+          </label>
+          <input type="text" id="role-emre" oninput="saveMemberData('emre')" class="w-full text-xs font-semibold text-slate-800 bg-white border border-slate-200 rounded-lg p-2 focus:ring-2 focus:ring-blue-500 focus:outline-none">
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div class="space-y-1.5">
+            <label class="text-xs font-bold text-slate-700 flex items-center gap-1.5 uppercase tracking-wider">
+              <i class="fa-solid fa-circle-check text-emerald-500"></i>
+              <span>Bu Hafta Ne Yaptım? (Tamamlananlar)</span>
+            </label>
+            <textarea id="done-emre" oninput="saveMemberData('emre')" rows="6" class="w-full text-xs p-3 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-blue-500 focus:outline-none leading-relaxed" placeholder="Bu hafta tamamladığınız çalışmaları buraya yazın..."></textarea>
+          </div>
+
+          <div class="space-y-1.5">
+            <label class="text-xs font-bold text-slate-700 flex items-center gap-1.5 uppercase tracking-wider">
+              <i class="fa-solid fa-bullseye text-blue-500"></i>
+              <span>Gelecek Hafta Ne Yapmayı Planlıyorum? (Hedefler)</span>
+            </label>
+            <textarea id="todo-emre" oninput="saveMemberData('emre')" rows="6" class="w-full text-xs p-3 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-blue-500 focus:outline-none leading-relaxed" placeholder="Önümüzdeki hafta hedeflerinizi buraya yazın..."></textarea>
+          </div>
+
+          <div class="space-y-1.5">
+            <label class="text-xs font-bold text-slate-700 flex items-center gap-1.5 uppercase tracking-wider">
+              <i class="fa-solid fa-triangle-exclamation text-amber-500"></i>
+              <span>Karşılaşılan Engeller / Destek Gerekenler</span>
+            </label>
+            <textarea id="blockers-emre" oninput="saveMemberData('emre')" rows="3" class="w-full text-xs p-3 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-blue-500 focus:outline-none leading-relaxed" placeholder="Test veya donanım engelleri..."></textarea>
+          </div>
+
+          <div class="space-y-1.5">
+            <label class="text-xs font-bold text-slate-700 flex items-center gap-1.5 uppercase tracking-wider">
+              <i class="fa-solid fa-link text-slate-500"></i>
+              <span>Notlar & Donanım / Fikstür Verileri</span>
+            </label>
+            <textarea id="notes-emre" oninput="saveMemberData('emre')" rows="3" class="w-full text-xs p-3 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-blue-500 focus:outline-none leading-relaxed" placeholder="A13 drone, motor ölçüleri ve fikstür notları..."></textarea>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ======================================================== -->
+    <!-- TAB 4: TUNAHAN DÜNDAR SEKME                              -->
+    <!-- ======================================================== -->
+    <div id="tab-tunahan" class="tab-page hidden space-y-5">
+      <div class="bg-white rounded-2xl border border-emerald-100 shadow-sm p-6 border-l-4 border-l-emerald-500 space-y-4">
+        <div class="flex flex-wrap items-center justify-between gap-3 pb-3 border-b border-slate-100">
+          <div>
+            <span class="text-[11px] font-mono font-bold text-emerald-600 uppercase tracking-wider">TÜBİTAK 2209-A & Bitirme Ekip Üyesi</span>
+            <h2 class="text-lg font-bold text-slate-900 flex items-center gap-2">
+              <i class="fa-solid fa-user-pen text-emerald-500"></i>
+              <span>Tunahan Dündar - Çalışma Sayfası</span>
+            </h2>
+          </div>
+          <div class="text-xs bg-emerald-50 text-emerald-700 px-3 py-1 rounded-full font-semibold">
+            2209-A Araştırmacı & Bitirme Projesi Üyesi
+          </div>
+        </div>
+
+        <div class="p-3 bg-slate-50 rounded-xl border border-slate-200 space-y-1">
+          <label class="text-xs font-bold text-slate-700 flex items-center gap-1.5">
+            <i class="fa-solid fa-id-badge text-emerald-500"></i>
+            <span>Görev / Odak Alanı Tanımı:</span>
+            <span class="text-[10px] bg-slate-200 text-slate-600 px-1.5 py-0.5 rounded font-medium">Toplantıda düzenlenebilir</span>
+          </label>
+          <input type="text" id="role-tunahan" oninput="saveMemberData('tunahan')" class="w-full text-xs font-semibold text-slate-800 bg-white border border-slate-200 rounded-lg p-2 focus:ring-2 focus:ring-emerald-500 focus:outline-none">
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div class="space-y-1.5">
+            <label class="text-xs font-bold text-slate-700 flex items-center gap-1.5 uppercase tracking-wider">
+              <i class="fa-solid fa-circle-check text-emerald-500"></i>
+              <span>Bu Hafta Ne Yaptım? (Tamamlananlar)</span>
+            </label>
+            <textarea id="done-tunahan" oninput="saveMemberData('tunahan')" rows="6" class="w-full text-xs p-3 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-emerald-500 focus:outline-none leading-relaxed" placeholder="Bu hafta tamamladığınız analiz ve modellemeler..."></textarea>
+          </div>
+
+          <div class="space-y-1.5">
+            <label class="text-xs font-bold text-slate-700 flex items-center gap-1.5 uppercase tracking-wider">
+              <i class="fa-solid fa-bullseye text-blue-500"></i>
+              <span>Gelecek Hafta Ne Yapmayı Planlıyorum? (Hedefler)</span>
+            </label>
+            <textarea id="todo-tunahan" oninput="saveMemberData('tunahan')" rows="6" class="w-full text-xs p-3 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-emerald-500 focus:outline-none leading-relaxed" placeholder="Gelecek hafta CAD ve FEM hedefleri..."></textarea>
+          </div>
+
+          <div class="space-y-1.5">
+            <label class="text-xs font-bold text-slate-700 flex items-center gap-1.5 uppercase tracking-wider">
+              <i class="fa-solid fa-triangle-exclamation text-amber-500"></i>
+              <span>Karşılaşılan Engeller / Destek Gerekenler</span>
+            </label>
+            <textarea id="blockers-tunahan" oninput="saveMemberData('tunahan')" rows="3" class="w-full text-xs p-3 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-emerald-500 focus:outline-none leading-relaxed" placeholder="Simülasyon veya lisans engelleri..."></textarea>
+          </div>
+
+          <div class="space-y-1.5">
+            <label class="text-xs font-bold text-slate-700 flex items-center gap-1.5 uppercase tracking-wider">
+              <i class="fa-solid fa-link text-slate-500"></i>
+              <span>Notlar & Simülasyon Referansları</span>
+            </label>
+            <textarea id="notes-tunahan" oninput="saveMemberData('tunahan')" rows="3" class="w-full text-xs p-3 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-emerald-500 focus:outline-none leading-relaxed" placeholder="Bloch-Floquet sınır koşulları ve CAD revizyonları..."></textarea>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ======================================================== -->
+    <!-- TAB 5: TALHA EROL SEKME                                  -->
+    <!-- ======================================================== -->
+    <div id="tab-talha" class="tab-page hidden space-y-5">
+      <div class="bg-white rounded-2xl border border-amber-100 shadow-sm p-6 border-l-4 border-l-amber-500 space-y-4">
+        <div class="flex flex-wrap items-center justify-between gap-3 pb-3 border-b border-slate-100">
+          <div>
+            <span class="text-[11px] font-mono font-bold text-amber-600 uppercase tracking-wider">Bitirme Projesi & Ortak Çalışma Ekip Üyesi</span>
+            <h2 class="text-lg font-bold text-slate-900 flex items-center gap-2">
+              <i class="fa-solid fa-user-gear text-amber-500"></i>
+              <span>Talha Erol - Çalışma Sayfası</span>
+            </h2>
+          </div>
+          <div class="text-xs bg-amber-50 text-amber-700 px-3 py-1 rounded-full font-semibold">
+            Bitirme Projesi Ekip Üyesi & Ortak Araştırmacı
+          </div>
+        </div>
+
+        <div class="p-3 bg-slate-50 rounded-xl border border-slate-200 space-y-1">
+          <label class="text-xs font-bold text-slate-700 flex items-center gap-1.5">
+            <i class="fa-solid fa-id-badge text-amber-500"></i>
+            <span>Görev / Odak Alanı Tanımı:</span>
+            <span class="text-[10px] bg-slate-200 text-slate-600 px-1.5 py-0.5 rounded font-medium">Toplantıda düzenlenebilir</span>
+          </label>
+          <input type="text" id="role-talha" oninput="saveMemberData('talha')" class="w-full text-xs font-semibold text-slate-800 bg-white border border-slate-200 rounded-lg p-2 focus:ring-2 focus:ring-amber-500 focus:outline-none">
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div class="space-y-1.5">
+            <label class="text-xs font-bold text-slate-700 flex items-center gap-1.5 uppercase tracking-wider">
+              <i class="fa-solid fa-circle-check text-emerald-500"></i>
+              <span>Bu Hafta Ne Yaptım? (Tamamlananlar)</span>
+            </label>
+            <textarea id="done-talha" oninput="saveMemberData('talha')" rows="6" class="w-full text-xs p-3 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-amber-500 focus:outline-none leading-relaxed" placeholder="Bu hafta tamamlanan çalışmaları buraya yazın..."></textarea>
+          </div>
+
+          <div class="space-y-1.5">
+            <label class="text-xs font-bold text-slate-700 flex items-center gap-1.5 uppercase tracking-wider">
+              <i class="fa-solid fa-bullseye text-blue-500"></i>
+              <span>Gelecek Hafta Ne Yapmayı Planlıyorum? (Hedefler)</span>
+            </label>
+            <textarea id="todo-talha" oninput="saveMemberData('talha')" rows="6" class="w-full text-xs p-3 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-amber-500 focus:outline-none leading-relaxed" placeholder="Gelecek hafta hedeflerinizi buraya yazın..."></textarea>
+          </div>
+
+          <div class="space-y-1.5">
+            <label class="text-xs font-bold text-slate-700 flex items-center gap-1.5 uppercase tracking-wider">
+              <i class="fa-solid fa-triangle-exclamation text-amber-500"></i>
+              <span>Karşılaşılan Engeller / Destek Gerekenler</span>
+            </label>
+            <textarea id="blockers-talha" oninput="saveMemberData('talha')" rows="3" class="w-full text-xs p-3 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-amber-500 focus:outline-none leading-relaxed" placeholder="Karşılaştığınız engeller veya ihtiyaçlar..."></textarea>
+          </div>
+
+          <div class="space-y-1.5">
+            <label class="text-xs font-bold text-slate-700 flex items-center gap-1.5 uppercase tracking-wider">
+              <i class="fa-solid fa-link text-slate-500"></i>
+              <span>Notlar & Kod / Bitirme Tezi Şablonları</span>
+            </label>
+            <textarea id="notes-talha" oninput="saveMemberData('talha')" rows="3" class="w-full text-xs p-3 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-amber-500 focus:outline-none leading-relaxed" placeholder="Notlar, dosya linkleri ve literatür kaynakları..."></textarea>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ======================================================== -->
+    <!-- TAB: BÜTÇE, FATURA & SATIN ALMA                          -->
+    <!-- ======================================================== -->
+    <div id="tab-budget" class="tab-page hidden space-y-6">
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
+          <div class="flex items-center justify-between">
+            <div class="text-xs font-bold text-slate-500 uppercase tracking-wider">Toplam TÜBİTAK Hibesi</div>
+            <button onclick="editTotalGrant()" class="text-slate-400 hover:text-rose-600 text-xs no-print" title="Hibe tutarını düzenle">
+              <i class="fa-solid fa-pen-to-square"></i>
+            </button>
+          </div>
+          <div class="text-2xl font-extrabold text-slate-900 mt-2" id="budgetTotalGrantDisplay">₺9,000.00</div>
+          <div class="text-[11px] text-slate-400 mt-1">2209-A 12 Aylık Hibe Limiti</div>
+        </div>
+
+        <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
+          <div class="text-xs font-bold text-slate-500 uppercase tracking-wider">Toplam Harcanan Bütçe</div>
+          <div class="text-2xl font-extrabold text-rose-600 mt-2" id="budgetTotalSpentDisplay">₺2,470.00</div>
+          <div class="text-[11px] text-slate-400 mt-1" id="budgetSpentPercent">%27.4 kullanıldı</div>
+        </div>
+
+        <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
+          <div class="text-xs font-bold text-slate-500 uppercase tracking-wider">Kalan Kullanılabilir Bakiye</div>
+          <div class="text-2xl font-extrabold text-emerald-600 mt-2" id="budgetRemainingDisplay">₺6,530.00</div>
+          <div class="text-[11px] text-emerald-600 font-semibold mt-1">Harcama güvenli sınırda</div>
+        </div>
+      </div>
+
+      <div class="bg-amber-50 border border-amber-200 rounded-2xl p-4 text-xs text-amber-900 flex items-start gap-3">
+        <i class="fa-solid fa-triangle-exclamation text-amber-600 text-base mt-0.5"></i>
+        <div class="space-y-1">
+          <div class="font-bold text-amber-950">TÜBİTAK 2209-A Fatura Kesim ve Harcama Kuralı (Yürütücü Elif Basmacı Dikkatine):</div>
+          <p class="leading-relaxed">
+            Tüm malzeme alımları (A13 drone, filament, DAQ aparatları vb.) mutlaka resmi faturalı olmalıdır. Fatura alıcı bilgisi olarak <strong>Elif Basmacı (T.C. Kimlik No)</strong> yazılmalı, açıklama kısmına ise mümkünse <em>"TÜBİTAK 2209-A Projesi Kapsamında"</em> ibaresi eklenmelidir. Fiş/fatura asılları ve e-faturalar proje sonuç raporunda TÜBİTAK'a teslim edilecektir.
+          </p>
+        </div>
+      </div>
+
+      <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 space-y-4">
+        <div class="flex flex-wrap items-center justify-between gap-3 pb-3 border-b border-slate-100">
+          <div>
+            <h3 class="text-base font-bold text-slate-900 flex items-center gap-2">
+              <i class="fa-solid fa-receipt text-rose-600"></i>
+              <span>Satın Alma & Fatura Kayıt Tablosu</span>
+            </h3>
+            <p class="text-xs text-slate-500">Proje bütçesinden yapılan her harcamayı faturasıyla birlikte kaydedin veya düzenleyin.</p>
+          </div>
+          <div class="flex items-center gap-2 no-print">
+            <button onclick="promptAddNewCategory()" class="px-2.5 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg text-xs font-semibold border border-slate-300 transition flex items-center gap-1.5">
+              <i class="fa-solid fa-tags text-indigo-500"></i>
+              <span>+ Kategori Ekle</span>
+            </button>
+            <button onclick="toggleExpenseForm()" class="px-3 py-1.5 bg-rose-600 hover:bg-rose-500 text-white rounded-lg text-xs font-bold transition flex items-center gap-1.5">
+              <i class="fa-solid fa-plus"></i>
+              <span>Yeni Harcama Ekle</span>
+            </button>
+          </div>
+        </div>
+
+        <div id="newExpenseForm" class="bg-slate-50 p-4 rounded-xl border border-slate-200 no-print hidden space-y-3">
+          <div class="flex items-center justify-between">
+            <div class="text-xs font-bold text-slate-700" id="expenseFormHeader">Yeni Fatura / Harcama Bilgileri:</div>
+            <button onclick="toggleExpenseForm()" class="text-xs text-slate-400 hover:text-slate-600"><i class="fa-solid fa-xmark"></i> İptal</button>
+          </div>
+          <input type="hidden" id="expEditIndex" value="-1">
+          <div class="grid grid-cols-1 sm:grid-cols-12 gap-3 text-xs">
+            <input type="text" id="expItem" placeholder="Malzeme Adı (örn: A13 Drone 2 Adet Yedek Kol)" class="sm:col-span-4 p-2 bg-white border border-slate-300 rounded-lg focus:ring-2 focus:ring-rose-500 focus:outline-none">
+            <input type="text" id="expVendor" placeholder="Firma / Satıcı (örn: Robolink Market)" class="sm:col-span-3 p-2 bg-white border border-slate-300 rounded-lg focus:ring-2 focus:ring-rose-500 focus:outline-none">
+            <input type="date" id="expDate" class="sm:col-span-2 p-2 bg-white border border-slate-300 rounded-lg focus:ring-2 focus:ring-rose-500 focus:outline-none">
+            <input type="number" id="expAmount" placeholder="Tutar (₺)" step="0.01" class="sm:col-span-2 p-2 bg-white border border-slate-300 rounded-lg focus:ring-2 focus:ring-rose-500 focus:outline-none">
+            <button onclick="addExpenseFromForm()" id="expSubmitBtn" class="sm:col-span-1 bg-emerald-600 hover:bg-emerald-500 text-white font-bold rounded-lg py-2 transition flex items-center justify-center">
+              Kaydet
+            </button>
+            <input type="text" id="expInvoiceNo" placeholder="Fatura No (örn: GIB2026000123)" class="sm:col-span-4 p-2 bg-white border border-slate-300 rounded-lg focus:ring-2 focus:ring-rose-500 focus:outline-none">
+            <div class="sm:col-span-4 flex items-center gap-1.5">
+              <select id="expCategory" onchange="onCategorySelectChange(this.value)" class="w-full p-2 bg-white border border-slate-300 rounded-lg focus:ring-2 focus:ring-rose-500 focus:outline-none font-medium"></select>
+              <button type="button" onclick="promptAddNewCategory()" class="p-2 bg-slate-200 hover:bg-slate-300 text-slate-700 rounded-lg shrink-0 border border-slate-300 transition" title="Yeni Kategori Ekle">
+                <i class="fa-solid fa-plus text-xs"></i>
+              </button>
+            </div>
+            <input type="text" id="expDriveLink" placeholder="Fatura Görseli / Drive Linki" class="sm:col-span-4 p-2 bg-white border border-slate-300 rounded-lg focus:ring-2 focus:ring-rose-500 focus:outline-none">
+          </div>
+        </div>
+
+        <div class="overflow-x-auto border border-slate-200 rounded-xl">
+          <table class="w-full text-left text-xs">
+            <thead class="bg-slate-100 text-slate-700 font-bold border-b border-slate-200">
+              <tr>
+                <th class="p-3">Malzeme / Harcama Kalemi</th>
+                <th class="p-3">Satıcı Firma</th>
+                <th class="p-3">Kategori</th>
+                <th class="p-3">Tarih</th>
+                <th class="p-3">Fatura No</th>
+                <th class="p-3">Tutar</th>
+                <th class="p-3 text-center">Fatura Linki</th>
+                <th class="p-3 text-center no-print">İşlem</th>
+              </tr>
+            </thead>
+            <tbody id="budgetExpensesTableBody" class="divide-y divide-slate-100"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ======================================================== -->
+    <!-- TAB: 12 AYLIK ZAMAN ÇİZELGESİ & GANTT                    -->
+    <!-- ======================================================== -->
+    <div id="tab-roadmap" class="tab-page hidden space-y-6">
+      <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 space-y-5">
+        <div class="flex flex-wrap items-center justify-between gap-3 pb-3 border-b border-slate-100">
+          <div>
+            <span class="text-xs font-mono font-bold text-indigo-600 uppercase tracking-wider">TÜBİTAK 2209-A (12 Ay) & Bitirme Projesi (2 Dönem)</span>
+            <h2 class="text-lg font-bold text-slate-900">Entegre Zaman Çizelgesi & Kilometre Taşları (Roadmap)</h2>
+            <p class="text-xs text-slate-500 mt-0.5">Aşamaları, tarihleri ve açıklamaları dilediğiniz gibi güncelleyebilirsiniz.</p>
+          </div>
+          <div class="text-xs bg-indigo-50 text-indigo-700 px-3 py-1.5 rounded-xl font-bold border border-indigo-200">
+            Hedef: %10+ İletim Azalımı & Başarılı Tez Savunması
+          </div>
+        </div>
+
+        <div id="roadmapEditContainer" class="bg-indigo-50/50 p-4 rounded-xl border border-indigo-200 hidden space-y-3 no-print">
+          <div class="flex items-center justify-between">
+            <h4 class="text-xs font-bold text-indigo-900 flex items-center gap-1.5">
+              <i class="fa-solid fa-pen-to-square text-indigo-600"></i>
+              <span id="roadmapEditTitleHeader">Aşamayı Düzenle</span>
+            </h4>
+            <button onclick="closeRoadmapEdit()" class="text-xs text-slate-400 hover:text-slate-600"><i class="fa-solid fa-xmark"></i> Kapat</button>
+          </div>
+          <input type="hidden" id="roadmapEditIndex" value="-1">
+          <div class="grid grid-cols-1 sm:grid-cols-12 gap-3 text-xs">
+            <input type="text" id="roadmapEditMonth" placeholder="Ay Aralığı (örn: Ay 1–2)" class="sm:col-span-2 p-2 bg-white border border-slate-300 rounded-lg">
+            <input type="text" id="roadmapEditCode" placeholder="Kod (örn: İP1 veya MİLAT)" class="sm:col-span-2 p-2 bg-white border border-slate-300 rounded-lg">
+            <input type="text" id="roadmapEditTitle" placeholder="Aşama Başlığı" class="sm:col-span-5 p-2 bg-white border border-slate-300 rounded-lg">
+            <input type="text" id="roadmapEditDeadline" placeholder="Tahmini Teslim" class="sm:col-span-3 p-2 bg-white border border-slate-300 rounded-lg">
+            <input type="text" id="roadmapEditDesc" placeholder="Detaylı Açıklama" class="sm:col-span-10 p-2 bg-white border border-slate-300 rounded-lg">
+            <button onclick="saveRoadmapItemFromForm()" class="sm:col-span-2 bg-indigo-600 hover:bg-indigo-500 text-white font-bold rounded-lg py-2 transition">
+              Güncelle
+            </button>
+          </div>
+        </div>
+
+        <div class="space-y-3" id="roadmapItemsContainer"></div>
+      </div>
+    </div>
+
+    <!-- ======================================================== -->
+    <!-- TAB: GENEL DENEY & LABORATUVAR DEFTERİ                   -->
+    <!-- ======================================================== -->
+    <div id="tab-logbook" class="tab-page hidden space-y-6">
+      <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 space-y-5">
+        <div class="flex flex-wrap items-center justify-between gap-3 pb-3 border-b border-slate-100">
+          <div>
+            <span class="text-xs font-mono font-bold text-cyan-600 uppercase tracking-wider">Tüm Deneysel Süreçler & Test Çalışmaları</span>
+            <h2 class="text-lg font-bold text-slate-900">Genel Deney & Laboratuvar Kayıt Defteri</h2>
+            <p class="text-xs text-slate-500 mt-0.5">Her farklı deney için bağımsız tablolar açabilir, bölümleri gizleyip açabilir, sütun ekleyebilir veya silebilirsiniz.</p>
+          </div>
+          <button onclick="promptAddNewLabSection()" class="px-3 py-1.5 bg-cyan-700 hover:bg-cyan-600 text-white rounded-lg text-xs font-bold transition flex items-center gap-1.5 no-print shadow">
+            <i class="fa-solid fa-plus"></i>
+            <span>Yeni Deney / Lab Bölümü Ekle</span>
+          </button>
+        </div>
+
+        <div class="space-y-4" id="labsContainer"></div>
+      </div>
+    </div>
+
+    <!-- ======================================================== -->
+    <!-- TAB: ORTAK DRIVE, CAD & KOD KÜTÜPHANESİ                  -->
+    <!-- ======================================================== -->
+    <div id="tab-resources" class="tab-page hidden space-y-6">
+      <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 space-y-5">
+        <div class="flex flex-wrap items-center justify-between gap-3 pb-3 border-b border-slate-100">
+          <div>
+            <span class="text-xs font-mono font-bold text-amber-600 uppercase tracking-wider">Tek Tıkla Proje Ekosistemi</span>
+            <h2 class="text-lg font-bold text-slate-900">Merkezi Dosya, CAD, Kod & Doküman Kütüphanesi</h2>
+            <p class="text-xs text-slate-500 mt-0.5">Ekip dosyaları, kod depoları ve şablonların merkezi paneli. Tüm kartları düzenleyebilirsiniz.</p>
+          </div>
+          <button onclick="toggleResourceForm()" class="px-3 py-1.5 bg-amber-600 hover:bg-amber-500 text-white rounded-lg text-xs font-bold transition flex items-center gap-1.5 no-print">
+            <i class="fa-solid fa-plus"></i>
+            <span>Yeni Bağlantı Ekle</span>
+          </button>
+        </div>
+
+        <div id="newResourceForm" class="bg-slate-50 p-4 rounded-xl border border-slate-200 no-print hidden space-y-3">
+          <div class="flex items-center justify-between">
+            <div class="text-xs font-bold text-slate-700" id="resourceFormHeader">Yeni Bağlantı / Kaynak Kartı:</div>
+            <button onclick="toggleResourceForm()" class="text-xs text-slate-400 hover:text-slate-600"><i class="fa-solid fa-xmark"></i> İptal</button>
+          </div>
+          <input type="hidden" id="resEditIndex" value="-1">
+          <div class="grid grid-cols-1 sm:grid-cols-12 gap-3 text-xs">
+            <input type="text" id="resTitle" placeholder="Kaynak Başlığı (örn: ANSYS Modal Analiz Arşivi)" class="sm:col-span-4 p-2 bg-white border border-slate-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:outline-none">
+            <input type="text" id="resCategory" placeholder="Kategori (örn: CAD / FEM)" class="sm:col-span-3 p-2 bg-white border border-slate-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:outline-none">
+            <input type="text" id="resUrl" placeholder="URL Bağlantısı (https://...)" class="sm:col-span-4 p-2 bg-white border border-slate-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:outline-none">
+            <button onclick="addResourceFromForm()" id="resSubmitBtn" class="sm:col-span-1 bg-amber-600 hover:bg-amber-500 text-white font-bold rounded-lg py-2 transition flex items-center justify-center">
+              Ekle
+            </button>
+            <input type="text" id="resDesc" placeholder="Kısa açıklama veya dosya detayları..." class="sm:col-span-12 p-2 bg-white border border-slate-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:outline-none">
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4" id="resourcesGridContainer"></div>
+      </div>
+    </div>
+
+    <!-- ======================================================== -->
+    <!-- TAB 6: DANIŞMAN & JÜRİ HAFTALIK ÖZET RAPORU              -->
+    <!-- ======================================================== -->
+    <div id="tab-advisor" class="tab-page hidden space-y-6">
+      <div class="bg-white rounded-2xl border border-purple-200 shadow-sm p-6 border-l-4 border-l-purple-600 space-y-5">
+        
+        <!-- RESMİ RAPOR ÜSTBİLGİSİ / AKADEMİK ANTET (PDF'TE EN BAŞTA ÇIKAR) -->
+        <div class="border-b-2 border-slate-900 pb-3 mb-2 print-card-block">
+          <div class="flex justify-between items-start text-xs text-slate-600 mb-1">
+            <span class="font-extrabold text-slate-900 tracking-wide uppercase">GEBZE TEKNİK ÜNİVERSİTESİ | MAKİNE MÜHENDİSLİĞİ BÖLÜMÜ</span>
+            <span class="font-mono font-semibold" id="printReportDate">2026/2027 Akademik Yılı</span>
+          </div>
+          <h1 class="text-base font-extrabold text-slate-900 leading-snug">
+            Quad-Rotor Titreşim Azaltımı için Bant Aralığı Odaklı Metamalzeme Bağlantı Elemanı
+          </h1>
+          <div class="flex flex-wrap gap-x-5 gap-y-1 text-xs text-slate-700 mt-2 pt-1 border-t border-slate-200">
+            <span><strong>Danışman:</strong> Dr. Öğr. Üyesi Saeed Lotfan</span>
+            <span><strong>2209-A Yürütücüsü:</strong> Elif Basmacı</span>
+            <span><strong>Bitirme Ekibi:</strong> Emre Özel, Tunahan Dündar, Talha Erol</span>
+          </div>
+        </div>
+
+        <!-- Ekran Görünümü Başlığı -->
+        <div class="flex flex-wrap items-center justify-between gap-3 pb-2 border-b border-slate-200 no-print">
+          <div>
+            <span class="text-xs font-mono font-bold text-purple-600 uppercase tracking-wider">Akademik Rapor Görünümü</span>
+            <h2 class="text-lg font-bold text-slate-900">Dr. Öğr. Üyesi Saeed Lotfan - Haftalık İlerleme Brifingi</h2>
+            <p class="text-xs text-slate-500 mt-0.5" id="advisorReportWeekSubtitle">Hafta 1 İlerleme Tablosu</p>
+          </div>
+          <button onclick="printAdvisorReportDirectly()" class="no-print px-3 py-1.5 bg-purple-600 hover:bg-purple-500 text-white rounded-lg font-bold text-xs shadow transition flex items-center gap-1.5">
+            <i class="fa-solid fa-print"></i>
+            <span>Resmi PDF / Yazdır</span>
+          </button>
+        </div>
+
+        <p class="text-xs text-slate-600 leading-relaxed bg-purple-50/60 p-3 rounded-xl border border-purple-100 print-card-block">
+          <strong>Sayın Hocam;</strong> Bu belge, TÜBİTAK 2209-A ve GTÜ Makine Bitirme Projesi kapsamında kurulan 4 kişilik araştırma ekibimizin aktif haftadaki tamamlanan işlerini, gelecek haftaki somut hedeflerini, teknik engellerini, bütçe durumunu ve laboratuvar test özetlerini içermektedir.
+        </p>
+
+        <!-- 1. Ekip Üyeleri Haftalık Matrisi -->
+        <div class="space-y-2">
+          <h3 class="text-xs font-bold text-slate-800 uppercase tracking-wider flex items-center gap-1.5">
+            <i class="fa-solid fa-users text-purple-600"></i>
+            <span>1. Ekip Üyeleri Haftalık Faaliyet & Hedef Matrisi</span>
+          </h3>
+          <div class="overflow-x-auto border border-slate-200 rounded-xl">
+            <table class="w-full text-left text-xs">
+              <thead class="bg-slate-100 text-slate-700 font-bold border-b border-slate-200">
+                <tr>
+                  <th class="p-3 w-1/4">Ekip Üyesi & Görev Kapsamı</th>
+                  <th class="p-3 w-1/3">Bu Hafta Tamamlanan Faaliyetler</th>
+                  <th class="p-3 w-1/3">Gelecek Hafta Hedefleri</th>
+                  <th class="p-3">Engel / İhtiyaç</th>
+                </tr>
+              </thead>
+              <tbody id="advisorTableBody" class="divide-y divide-slate-200"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- 2 & 3. Danışman Raporu: Bütçe ve Laboratuvar 2'li Özet Alanı (Bölünmez Blok) -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 pt-1 print-card-block">
+          <!-- Bütçe Özeti -->
+          <div class="p-4 rounded-xl border border-slate-200 bg-slate-50/60 space-y-2.5">
+            <div class="flex items-center justify-between pb-1.5 border-b border-slate-200">
+              <h4 class="text-xs font-bold text-slate-800 uppercase tracking-wider flex items-center gap-1.5">
+                <i class="fa-solid fa-wallet text-emerald-600"></i>
+                <span>2. TÜBİTAK 2209-A Güncel Finans Durumu</span>
+              </h4>
+              <span class="text-[11px] font-bold text-emerald-700 bg-emerald-100/70 px-2 py-0.5 rounded" id="advisorBudgetRemainBadge">Kalan: ₺6,530.00</span>
+            </div>
+            <div class="grid grid-cols-3 gap-2 text-center text-xs">
+              <div class="bg-white p-2 rounded-lg border border-slate-200">
+                <span class="text-[10px] text-slate-500 block">Toplam Hibe</span>
+                <strong class="text-slate-800" id="advisorTotalGrant">₺9,000.00</strong>
+              </div>
+              <div class="bg-white p-2 rounded-lg border border-slate-200">
+                <span class="text-[10px] text-slate-500 block">Harcanan</span>
+                <strong class="text-rose-600" id="advisorTotalSpent">₺2,470.00</strong>
+              </div>
+              <div class="bg-white p-2 rounded-lg border border-slate-200">
+                <span class="text-[10px] text-slate-500 block">Kullanım Oranı</span>
+                <strong class="text-indigo-600" id="advisorSpentPercent">%27.4</strong>
+              </div>
+            </div>
+            <div class="text-[11px] text-slate-600 pt-1" id="advisorRecentExpenseNote"></div>
+          </div>
+
+          <!-- Laboratuvar Deneyleri Özeti -->
+          <div class="p-4 rounded-xl border border-slate-200 bg-slate-50/60 space-y-2.5">
+            <div class="flex items-center justify-between pb-1.5 border-b border-slate-200">
+              <h4 class="text-xs font-bold text-slate-800 uppercase tracking-wider flex items-center gap-1.5">
+                <i class="fa-solid fa-flask-vial text-cyan-600"></i>
+                <span>3. Laboratuvar & Test Süreçleri Özeti</span>
+              </h4>
+              <span class="text-[11px] font-bold text-cyan-800 bg-cyan-100/70 px-2 py-0.5 rounded" id="advisorLabCountBadge">2 Bölüm Aktif</span>
+            </div>
+            <div class="space-y-1.5 text-xs" id="advisorLabsSummaryContainer"></div>
+          </div>
+        </div>
+
+        <!-- Hoca Geri Bildirim Alanı (Bölünmez Blok) -->
+        <div class="space-y-1.5 print-card-block">
+          <label class="text-xs font-bold text-slate-800 uppercase tracking-wider flex items-center gap-1.5">
+            <i class="fa-solid fa-comment-dots text-purple-600"></i>
+            <span>Danışman Hoca ve Jüri Geri Bildirimleri / Kararları:</span>
+          </label>
+          <textarea id="advisorFeedbackInput" oninput="saveCurrentWeekMeta()" rows="3" class="w-full text-xs p-3 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-purple-500 focus:outline-none leading-relaxed" placeholder="Danışman hocanın toplantıda belirttiği uyarılar, makale yönlendirmeleri ve kararlar..."></textarea>
+        </div>
+
+      </div>
+    </div>
+
+  </main>
+
+  <!-- ======================================================== -->
+  <!-- ALT BİLGİ                                                -->
+  <!-- ======================================================== -->
+  <footer class="bg-white border-t border-slate-200 py-3 text-center text-xs text-slate-500 no-print mt-auto">
+    <div class="max-w-7xl mx-auto px-4">
+      TÜBİTAK 2209-A (Elif Basmacı, Emre Özel, Tunahan Dündar) & GTÜ Bitirme Tezi (Emre Özel, Tunahan Dündar, Talha Erol) Ortak Portalı &copy; 2026.
+    </div>
+  </footer>
+
+  <!-- ======================================================== -->
+  <!-- JAVASCRIPT: DİNAMİK YÖNETİM & FONKSİYONLAR              -->
+  <!-- ======================================================== -->
+  <script>
+    const initialProjectState = {
+      activeWeekKey: "w1",
+      budget: {
+        totalGrant: 9000,
+        categories: [
+          "Donanım / Drone",
+          "3B Baskı & Filament (PETG/TPU)",
+          "Fikstür & Mekanik Parça",
+          "Sensör & Kablolama",
+          "Kargo & Diğer"
+        ],
+        expenses: [
+          { id: 1, item: "A13 Fırçasız Katlanabilir Drone", vendor: "Robolink Market", date: "2026-10-02", invoiceNo: "GIB2026000101", amount: 1650.00, category: "Donanım / Drone", link: "" },
+          { id: 2, item: "A13 Fırçasız Motorlu Yedek Kol (2 Adet)", vendor: "Direnç.net İthalat", date: "2026-10-02", invoiceNo: "GIB2026000102", amount: 820.00, category: "Donanım / Drone", link: "" }
+        ]
+      },
+      roadmap: [
+        { id: "m1", month: "Ay 1–2", code: "İP1", title: "Drone Ölçümleri & FFT/PSD Hedef Frekans Tespiti", desc: "Sabitlenmiş drone üzerinde farklı gaz seviyelerinde testler, baskın motor tepe frekanslarının belirlenmesi (180–360 Hz).", status: "doing", progress: 25, deadline: "Kasım 2026", scope: "2209-A & Bitirme" },
+        { id: "m2", month: "Ay 2–4", code: "İP2", title: "Referans Parça CAD & Modal/Dispersiyon Analizi", desc: "Orijinal kolun SolidWorks 1:1 CAD modellemesi, Bloch-Floquet periyodik sınır koşulları ve ANSYS doğal frekans analizi.", status: "todo", progress: 0, deadline: "Ocak 2027", scope: "2209-A & Bitirme" },
+        { id: "m3", month: "Ay 4", code: "MİLAT", title: "GTÜ Bitirme Tezi Güz Dönemi Ara Rapor Teslimi", desc: "Bitirme tezi ara raporunun jüriye sunumu, literatür taraması ve ilk deneysel/sayısal bulgular.", status: "todo", progress: 0, deadline: "Şubat 2027", scope: "Bitirme Tezi" },
+        { id: "m4", month: "Ay 4–9", code: "İP3", title: "Metamalzeme Tasarımı & Parametrik Optimizasyon", desc: "Kütlesi ve dış ölçüsü sabit, yerel rezonatörlü iç kafes mimarisi geliştirme ve band-gap parametrik simülasyonları.", status: "todo", progress: 0, deadline: "Haziran 2027", scope: "2209-A & Bitirme" },
+        { id: "m5", month: "Ay 9–10", code: "MİLAT", title: "GTÜ Bitirme Tezi Jüri Savunması & Sergi", desc: "Bitirme projesi final tez teslimi, poster sunumu ve akademik jüri değerlendirmesi.", status: "todo", progress: 0, deadline: "Temmuz 2027", scope: "Bitirme Tezi" },
+        { id: "m6", month: "Ay 9–12", code: "İP4", title: "3B Baskı, Validasyon Deneyleri & %10+ İletim Düşüşü", desc: "PETG/TPU numunelerin basımı, orijinal parça ile karşılaştırmalı testler ve TÜBİTAK 2209-A Sonuç Raporunun teslimi.", status: "todo", progress: 0, deadline: "Ekim 2027", scope: "TÜBİTAK 2209-A" }
+      ],
+      labs: [
+        {
+          id: "lab_vibr",
+          title: "1. Titreşim & Dinamik Karakterizasyon Testleri",
+          desc: "İvmeölçer, DAQ kartı, farklı gaz seviyeleri ve motor-gövde titreşim iletim testleri.",
+          isOpen: true,
+          columns: ["Ölçüm No", "Tarih", "Test Numunesi", "Gaz Seviyesi", "Örnekleme Frekansı", "Motor RMS", "Gövde RMS", "İletim Oranı (T)", "Gözlemler / Notlar", "Drive / Ham CSV Linki"],
+          rows: [
+            {
+              id: 1,
+              values: {
+                "Ölçüm No": "D00-REF-GURULTU",
+                "Tarih": "2026-10-05",
+                "Test Numunesi": "Orijinal Kol",
+                "Gaz Seviyesi": "Motor Kapalı (Gürültü)",
+                "Örnekleme Frekansı": "5 kHz",
+                "Motor RMS": "0.08 m/s²",
+                "Gövde RMS": "0.07 m/s²",
+                "İletim Oranı (T)": "0.88",
+                "Gözlemler / Notlar": "Fikstür ve laboratuvar zemin gürültüsü tabanı.",
+                "Drive / Ham CSV Linki": ""
+              }
+            },
+            {
+              id: 2,
+              values: {
+                "Ölçüm No": "D01-ORIG-G30",
+                "Tarih": "2026-10-05",
+                "Test Numunesi": "Orijinal Kol",
+                "Gaz Seviyesi": "%30 Gaz",
+                "Örnekleme Frekansı": "5 kHz",
+                "Motor RMS": "4.12 m/s²",
+                "Gövde RMS": "3.65 m/s²",
+                "İletim Oranı (T)": "0.89",
+                "Gözlemler / Notlar": "5 tekrar ortalaması. 182 Hz'de ilk motor tepe frekansı.",
+                "Drive / Ham CSV Linki": ""
+              }
+            }
+          ]
+        },
+        {
+          id: "lab_3d",
+          title: "2. 3B Baskı Numune & Malzeme Dayanım Testleri",
+          desc: "PETG, TPU ve metamalzeme prototiplerinin doluluk, kütle doğrulaması ve mukavemet testleri.",
+          isOpen: true,
+          columns: ["Numune Kodu", "Tarih", "Filament Türü", "Doluluk / Infill (%)", "Ölçülen Kütle (g)", "Mekanik Davranış", "Notlar & Sonuç", "Model / Rapor Linki"],
+          rows: [
+            {
+              id: 1,
+              values: {
+                "Numune Kodu": "P01-PETG",
+                "Tarih": "2026-10-10",
+                "Filament Türü": "PETG",
+                "Doluluk / Infill (%)": "%40 Gyroid",
+                "Ölçülen Kütle (g)": "24.5 g",
+                "Mekanik Davranış": "Rijit, rijitlik korunmuş",
+                "Notlar & Sonuç": "Orijinal kol kütlesi ile tam eşleşti.",
+                "Model / Rapor Linki": ""
+              }
+            }
+          ]
+        }
+      ],
+      resources: [
+        { id: 1, title: "Google Drive Ana Proje Klasörü", category: "Bulut Depolama", url: "https://drive.google.com", desc: "Tüm ham ölçüm CSV dosyaları, fatura görselleri, fotoğraflar ve toplantı notları." },
+        { id: 2, title: "MATLAB & Sinyal Analiz Deposu (GitHub)", category: "Kod & Algoritma", url: "https://github.com", desc: "FFT, Welch PSD ve transmissibility hesaplayan MATLAB analiz scriptleri ve algoritmaları." },
+        { id: 3, title: "SolidWorks & ANSYS Model Klasörü", category: "CAD & FEM", url: "https://drive.google.com", desc: "1:1 drone kolu montajı, birim hücre ve parametrik STEP modelleri." },
+        { id: 4, title: "GTÜ Makine Bitirme Tezi Kılavuzu & Şablonu", category: "Akademik Tez", url: "https://www.gtu.edu.tr", desc: "GTÜ Makine Mühendisliği resmi bitirme tezi yazım kuralları ve LaTeX/Word şablonu." },
+        { id: 5, title: "TÜBİTAK BİDEB / PRODİS Takip Sistemi", category: "Resmi Sistem", url: "https://ebideb.tubitak.gov.tr", desc: "2209-A resmi proje takip, bütçe bildirimi ve sonuç raporu yükleme ekranı." }
+      ],
+      weeks: {
+        "w1": {
+          id: "w1",
+          number: 1,
+          name: "Hafta 1: Proje Kabulü & Görev Paylaşımı",
+          date: "Ekim 2026",
+          decisions: "1. TÜBİTAK 2209-A kabulü ve Bitirme Projesi ortak çalışma takvimi onaylandı.\n2. A13 fırçasız motorlu drone ve 2 adet yedek kolun sipariş süreci başlatıldı.\n3. Emre'nin zemin sabitleme fikstürü eskizlerini hazırlamasına karar verildi.\n4. Simülasyon ve MATLAB sinyal analiz şablonlarının kurulması kararlaştırıldı.",
+          advisorFeedback: "Danışman Saeed Hoca: 'Düşük frekanstaki motor dönme harmoniklerine odaklanın. Öncelikle motor çalışmadan boş fikstürün rezonansını test edip kayda geçirin.'",
+          tasks: [
+            { id: 1, text: "A13 fırçasız drone ve yedek kolları satın alma listesine eklemek", assignee: "Elif", status: "doing" },
+            { id: 2, text: "Test tablası (fikstür) sabitleme mekanizmasının mekanik eskizini çizmek", assignee: "Emre", status: "todo" },
+            { id: 3, text: "Birim hücre geometrisi için ANSYS/COMSOL ortamında analiz şablonu açmak", assignee: "Tunahan", status: "todo" },
+            { id: 4, text: "MATLAB üzerinde FFT ve Welch PSD çizen temel veri analiz scriptini yazmak", assignee: "Talha", status: "todo" },
+            { id: 5, text: "Bitirme tezi takvimi ile 2209-A takviminin dönemsel uyumunu kontrol etmek", assignee: "Tüm Ekip", status: "doing" }
+          ],
+          members: {
+            elif: {
+              role: "TÜBİTAK 2209-A Yürütücüsü (Yönetim, Üniversite/TÜBİTAK İletişimi & Entegrasyon)",
+              done: "• Emre'nin hazırladığı teknik ön çalışma incelendi.\n• 2 gün sonraki ilk kick-off toplantısı planlandı.\n• Süreç boyunca kullanılabilmesi için bir dosya hazırlandı.",
+              todo: "• Hazırlanan siteyi ekip arkadaşlarına tanıtmak ve kullanımı hakkında bilgilendirmek.\n• Toplantıyı yönetip görev dağılımı hakkında konuşmak.\n• Saeed Hoca ile görüşme hakkında ekip ile görüşmek.",
+              blockers: "Henüz engel yok. TÜBİTAK bütçe aktarım takvimi takip edilecek.",
+              notes: "TÜBİTAK Proje Kodu ve GTÜ Makine Bölüm Laboratuvarı izin prosedürleri."
+            },
+            emre: {
+              role: "2209-A Araştırmacı & Bitirme Ekip Üyesi (Ölçüm Altyapısı, Drone Donanımı & Test Fikstürü)",
+              done: "• Proje uygulama yol haritası ve ön çalışma sunumu hazırlandı.\n• Fırçasız motorlu A13 katlanabilir drone ve yedek kol alternatifleri araştırıldı.\n• Deney parametreleri (örnekleme frekansı, gaz seviyeleri) belirlendi.",
+              todo: "• Drone ve yedek kol satıcı linklerini toplantıda ekibe sunmak.\n• Titreşim ölçümü için zemine sabitleme aparatının (fikstür) gereksinimlerini çıkarmak.\n• İvmeölçer sensörlerin motor ve gövde üzerindeki yerleşim noktalarını tartışmak.",
+              blockers: "Yedek motorlu kolların kargo tedarik süresi.",
+              notes: "A13 modeli fırçasız olmalı; elektrik bağlantısının soketli mi lehimli mi olduğu incelenecek."
+            },
+            tunahan: {
+              role: "2209-A Araştırmacı & Bitirme Ekip Üyesi (CAD Modelleme, Sayısal Analizler & ANSYS/COMSOL FEM)",
+              done: "• Fononik kristaller ve metamalzeme band-gap literatürü incelendi.\n• Düşük frekansta yerel rezonatör yaklaşımının avantajları araştırıldı.",
+              todo: "• Drone kolu teslim alındığında kumpasla 1:1 SolidWorks CAD modelini çizmek.\n• Bloch-Floquet periyodik sınır koşulları için simülasyon ortamını kurmak.\n• Doğal frekans ve mod şekillerini çıkarma hazırlığı yapmak.",
+              blockers: "Numune parça henüz elimizde olmadığı için parça ölçülerinin beklenmesi.",
+              notes: "En önemli kısıt: Yeni parçanın dış boyutları ve toplam kütlesi orijinaliyle eşit kalmalı."
+            },
+            talha: {
+              role: "Bitirme Ekip Üyesi & Ortak Araştırmacı (Sinyal İşleme, MATLAB/Python, 3B Baskı & Bitirme Tezi)",
+              done: "• Bitirme projesi ortağı olarak sürece katıldım, 2209-A başvuru metnini ve sunumu inceledim.\n• Bitirme projesi yazım formatı ve dönemsel teslim şartları araştırıldı.",
+              todo: "• MATLAB üzerinde ivmeölçer zaman verilerini FFT ve Welch PSD spektrumuna çeviren script taslağını yazmak.\n• 3B yazıcı için PETG ve TPU filamentlerinin dinamik sönüm farklarını araştırmak.\n• Bitirme tezi dönem takvimini ve ara rapor şablonunu oluşturmak.",
+              blockers: "Sensör çıkış formatına göre DAQ kartı kütüphanelerinin netleştirilmesi.",
+              notes: "Transmissibility formülü: T(f) = A_govde / A_motor. Başarı hedefi: Gövde titreşiminde min %10 azalma."
+            }
+          }
+        }
+      }
+    };
+
+    let projectState = {};
+
+    function initApp() {
+      const stored = localStorage.getItem('tubitak_2209_v9_state');
+      if (stored) {
+        try { projectState = JSON.parse(stored); } catch(e) { projectState = initialProjectState; }
+      } else {
+        const oldStored = localStorage.getItem('tubitak_2209_v8_state') || localStorage.getItem('tubitak_2209_v7_state') || localStorage.getItem('tubitak_2209_v6_state');
+        if (oldStored) {
+          try {
+            const parsedOld = JSON.parse(oldStored);
+            projectState = Object.assign({}, initialProjectState, parsedOld);
+            if (!projectState.budget) projectState.budget = initialProjectState.budget;
+            if (!projectState.budget.categories) projectState.budget.categories = initialProjectState.budget.categories;
+            if (!projectState.roadmap) projectState.roadmap = initialProjectState.roadmap;
+            if (!projectState.labs) projectState.labs = initialProjectState.labs;
+            if (!projectState.resources) projectState.resources = initialProjectState.resources;
+          } catch(e) { projectState = initialProjectState; }
+        } else {
+          projectState = initialProjectState;
+        }
+      }
+
+      if (!projectState.weeks || Object.keys(projectState.weeks).length === 0) projectState.weeks = initialProjectState.weeks;
+      if (!projectState.budget.categories || projectState.budget.categories.length === 0) projectState.budget.categories = initialProjectState.budget.categories;
+      if (!projectState.labs || projectState.labs.length === 0) projectState.labs = initialProjectState.labs;
+
+      renderWeekSelector();
+      loadActiveWeek();
+      setupBulletTextareas();
+      renderBudgetCategoriesSelect();
+      renderBudgetModule();
+      renderRoadmapModule();
+      renderLabsModule();
+      renderResourcesModule();
+      updateDashboardWidgets();
+    }
+
+    // Doğrudan Danışman Raporunu Yazdırma
+    function printAdvisorReportDirectly() {
+      switchTab('advisor');
+      setTimeout(() => {
+        window.print();
+      }, 150);
+    }
+
+    function renderWeekSelector() {
+      const select = document.getElementById('weekSelector');
+      select.innerHTML = '';
+      const weekKeys = Object.keys(projectState.weeks).sort((a,b) => projectState.weeks[a].number - projectState.weeks[b].number);
+
+      weekKeys.forEach(key => {
+        const w = projectState.weeks[key];
+        const opt = document.createElement('option');
+        opt.value = key;
+        opt.innerText = w.name || `Hafta ${w.number}`;
+        if (key === projectState.activeWeekKey) opt.selected = true;
+        select.appendChild(opt);
+      });
+    }
+
+    function onWeekChange(selectedKey) {
+      projectState.activeWeekKey = selectedKey;
+      saveProjectData(false);
+      loadActiveWeek();
+    }
+
+    function promptAddNewWeek() {
+      const weekKeys = Object.keys(projectState.weeks);
+      const nextNum = weekKeys.length + 1;
+      const weekName = prompt(`Yeni hafta başlığı:`, `Hafta ${nextNum}`);
+      if (!weekName || weekName.trim() === '') return;
+
+      const newKey = `w${nextNum}`;
+      const currentWeekData = projectState.weeks[projectState.activeWeekKey];
+      const newMembers = {};
+      const memberKeys = ['elif', 'emre', 'tunahan', 'talha'];
+      
+      memberKeys.forEach(m => {
+        const prev = (currentWeekData && currentWeekData.members && currentWeekData.members[m]) ? currentWeekData.members[m] : {};
+        newMembers[m] = { role: prev.role || "", done: "", todo: "", blockers: "", notes: "" };
+      });
+
+      projectState.weeks[newKey] = {
+        id: newKey,
+        number: nextNum,
+        name: weekName.trim(),
+        date: new Date().toLocaleDateString('tr-TR', { month: 'long', year: 'numeric' }),
+        decisions: "",
+        advisorFeedback: "",
+        tasks: [],
+        members: newMembers
+      };
+
+      projectState.activeWeekKey = newKey;
+      saveProjectData(true);
+      renderWeekSelector();
+      loadActiveWeek();
+      alert(`"${weekName.trim()}" başarıyla oluşturuldu! Tüm formlar temiz ve hazır.`);
+    }
+
+    function deleteCurrentWeek() {
+      const weekKeys = Object.keys(projectState.weeks);
+      if (weekKeys.length <= 1) {
+        alert("Sistemde en az bir hafta kayıtlı kalmalıdır!");
+        return;
+      }
+      const currentWeek = projectState.weeks[projectState.activeWeekKey];
+      const weekName = currentWeek ? (currentWeek.name || `Hafta ${currentWeek.number}`) : 'Aktif hafta';
+
+      if (!confirm(`"${weekName}" kaydını silmek istediğinize emin misiniz?`)) return;
+
+      delete projectState.weeks[projectState.activeWeekKey];
+      const remainingKeys = Object.keys(projectState.weeks).sort((a,b) => projectState.weeks[a].number - projectState.weeks[b].number);
+      projectState.activeWeekKey = remainingKeys[remainingKeys.length - 1];
+      saveProjectData(true);
+      renderWeekSelector();
+      loadActiveWeek();
+      alert(`"${weekName}" başarıyla silindi!`);
+    }
+
+    function clearCurrentWeekForms() {
+      const currentWeek = projectState.weeks[projectState.activeWeekKey];
+      if (!currentWeek) return;
+      if (!confirm(`"${currentWeek.name}" haftasındaki formları temizlemek istediğinize emin misiniz?`)) return;
+
+      ['elif', 'emre', 'tunahan', 'talha'].forEach(m => {
+        if (currentWeek.members && currentWeek.members[m]) {
+          currentWeek.members[m].done = "";
+          currentWeek.members[m].todo = "";
+          currentWeek.members[m].blockers = "";
+          currentWeek.members[m].notes = "";
+        }
+      });
+
+      saveProjectData(true);
+      loadActiveWeek();
+      alert("Bu haftanın formları temizlendi!");
+    }
+
+    function setupBulletTextareas() {
+      const textareas = document.querySelectorAll('textarea');
+      textareas.forEach(textarea => {
+        if (textarea.dataset.bulletBound) return;
+        textarea.dataset.bulletBound = 'true';
+
+        textarea.addEventListener('focus', function() {
+          if (this.value.trim() === '') {
+            this.value = '• ';
+            this.selectionStart = this.selectionEnd = 2;
+          }
+        });
+
+        textarea.addEventListener('keydown', function(e) {
+          const start = this.selectionStart;
+          const end = this.selectionEnd;
+          const val = this.value;
+
+          if (e.key === 'Enter') {
+            e.preventDefault();
+            const lineStart = val.lastIndexOf('\n', start - 1) + 1;
+            const nextNewline = val.indexOf('\n', start);
+            const lineEnd = nextNewline === -1 ? val.length : nextNewline;
+            const currentLine = val.substring(lineStart, lineEnd);
+
+            if (currentLine.trim() === '•' || currentLine.trim() === '') {
+              const before = val.substring(0, lineStart);
+              const after = val.substring(lineEnd);
+              this.value = before + after;
+              this.selectionStart = this.selectionEnd = lineStart;
+            } else {
+              const insert = '\n• ';
+              const before = val.substring(0, start);
+              const after = val.substring(end);
+              this.value = before + insert + after;
+              this.selectionStart = this.selectionEnd = start + insert.length;
+            }
+            this.dispatchEvent(new Event('input'));
+            return;
+          }
+
+          if (e.key === 'Backspace' && start === end) {
+            const lineStart = val.lastIndexOf('\n', start - 1) + 1;
+            const prefix = val.substring(lineStart, start);
+
+            if (prefix === '• ' || prefix === '•') {
+              e.preventDefault();
+              const before = val.substring(0, lineStart);
+              const after = val.substring(start);
+              this.value = before + after;
+              this.selectionStart = this.selectionEnd = lineStart;
+              this.dispatchEvent(new Event('input'));
+              return;
+            }
+          }
+        });
+      });
+    }
+
+    function loadActiveWeek() {
+      const currentWeek = projectState.weeks[projectState.activeWeekKey];
+      if (!currentWeek) return;
+
+      document.getElementById('dashboard-week-title').innerText = currentWeek.name || `Hafta ${currentWeek.number}`;
+      document.getElementById('advisorReportWeekSubtitle').innerText = `${currentWeek.name} - Resmi İlerleme Özeti`;
+
+      document.getElementById('weekDecisionsInput').value = currentWeek.decisions || "";
+      document.getElementById('advisorFeedbackInput').value = currentWeek.advisorFeedback || "";
+
+      ['elif', 'emre', 'tunahan', 'talha'].forEach(m => {
+        const data = (currentWeek.members && currentWeek.members[m]) ? currentWeek.members[m] : {};
+        document.getElementById(`role-${m}`).value = data.role || "";
+        document.getElementById(`done-${m}`).value = data.done || "";
+        document.getElementById(`todo-${m}`).value = data.todo || "";
+        document.getElementById(`blockers-${m}`).value = data.blockers || "";
+        document.getElementById(`notes-${m}`).value = data.notes || "";
+      });
+
+      renderDashboardCards();
+      renderTasksTable();
+      renderAdvisorTable();
+      updateDashboardWidgets();
+    }
+
+    function renderDashboardCards() {
+      const container = document.getElementById('dashboard-members-grid');
+      container.innerHTML = '';
+      const currentWeek = projectState.weeks[projectState.activeWeekKey];
+
+      const config = {
+        elif: { name: "Elif Basmacı", scope: "TÜBİTAK 2209-A Yürütücüsü", border: "border-rose-500", text: "text-rose-600", icon: "fa-solid fa-user-shield text-rose-500" },
+        emre: { name: "Emre Özel", scope: "2209-A & Bitirme Ekip Üyesi", border: "border-blue-500", text: "text-blue-600", icon: "fa-solid fa-user-gear text-blue-500" },
+        tunahan: { name: "Tunahan Dündar", scope: "2209-A & Bitirme Ekip Üyesi", border: "border-emerald-500", text: "text-emerald-600", icon: "fa-solid fa-user-pen text-emerald-500" },
+        talha: { name: "Talha Erol", scope: "Bitirme & Ortak Çalışma", border: "border-amber-500", text: "text-amber-600", icon: "fa-solid fa-user-gear text-amber-500" }
+      };
+
+      for (let key in config) {
+        const item = config[key];
+        const data = (currentWeek.members && currentWeek.members[key]) ? currentWeek.members[key] : {};
+
+        const card = document.createElement('div');
+        card.className = `p-3.5 rounded-2xl border border-slate-200 bg-white space-y-2.5 shadow-sm border-t-4 ${item.border}`;
+        card.innerHTML = `
+          <div class="flex items-center justify-between pb-1.5 border-b border-slate-100">
+            <div>
+              <div class="text-sm font-bold text-slate-800 leading-tight flex items-center gap-1.5">
+                <i class="${item.icon}"></i>
+                <span>${item.name}</span>
+              </div>
+              <div class="text-[10px] ${item.text} font-bold mt-0.5">${item.scope}</div>
+              <div class="text-[10px] text-slate-500 line-clamp-1">${data.role || 'Görev tanımlanmadı'}</div>
+            </div>
+            <button onclick="switchTab('${key}')" class="text-[11px] bg-slate-50 hover:bg-slate-100 px-2 py-0.5 rounded border border-slate-200 text-slate-600 font-semibold transition">
+              Düzenle
+            </button>
+          </div>
+
+          <div>
+            <div class="text-[10px] font-bold uppercase tracking-wider text-slate-500 mb-1 flex items-center gap-1">
+              <i class="fa-solid fa-check text-emerald-500"></i> Bu Hafta Yapılanlar:
+            </div>
+            <p class="text-xs text-slate-700 whitespace-pre-line bg-slate-50 p-2 rounded-lg border border-slate-100 min-h-[48px] leading-snug line-clamp-4">
+              ${data.done || '<span class="text-slate-400 italic">Henüz giriş yapılmadı...</span>'}
+            </p>
+          </div>
+
+          <div>
+            <div class="text-[10px] font-bold uppercase tracking-wider text-slate-500 mb-1 flex items-center gap-1">
+              <i class="fa-solid fa-bullseye text-blue-500"></i> Gelecek Hafta Hedefleri:
+            </div>
+            <p class="text-xs text-slate-700 whitespace-pre-line bg-slate-50 p-2 rounded-lg border border-slate-100 min-h-[48px] leading-snug line-clamp-4">
+              ${data.todo || '<span class="text-slate-400 italic">Henüz giriş yapılmadı...</span>'}
+            </p>
+          </div>
+
+          ${data.blockers ? `
+          <div class="bg-amber-50 p-2 rounded-lg border border-amber-200 text-[10px] text-amber-800 leading-tight">
+            <strong>Engel:</strong> ${data.blockers}
+          </div>` : ''}
+        `;
+        container.appendChild(card);
+      }
+    }
+
+    function renderTasksTable() {
+      const currentWeek = projectState.weeks[projectState.activeWeekKey];
+      const tbody = document.getElementById('tasksTableBody');
+      tbody.innerHTML = '';
+
+      if (!currentWeek.tasks || currentWeek.tasks.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="5" class="p-4 text-center text-slate-400 italic">Bu hafta için henüz görev eklenmedi.</td></tr>`;
+        return;
+      }
+
+      currentWeek.tasks.forEach((task, index) => {
+        const tr = document.createElement('tr');
+        tr.className = task.status === 'done' ? 'bg-slate-50/60' : 'hover:bg-slate-50';
+
+        const isDone = task.status === 'done';
+        const isDoing = task.status === 'doing';
+        let badgeClass = isDone ? "bg-emerald-100 text-emerald-800 font-bold" : isDoing ? "bg-blue-100 text-blue-800 font-bold" : "bg-slate-100 text-slate-700";
+        let statusLabel = isDone ? "Tamamlandı" : isDoing ? "Devam Ediyor" : "Beklemede";
+
+        tr.innerHTML = `
+          <td class="p-2.5 text-center">
+            <input type="checkbox" ${isDone ? 'checked' : ''} onchange="toggleTaskDone(${index})" class="w-4 h-4 rounded text-rose-600 focus:ring-rose-500 cursor-pointer">
+          </td>
+          <td class="p-2.5">
+            <span class="${isDone ? 'line-through text-slate-400' : 'text-slate-800 font-medium'} leading-snug">${task.text}</span>
+          </td>
+          <td class="p-2.5 font-semibold text-slate-700">
+            <span class="inline-flex items-center gap-1">
+              <i class="fa-regular fa-user text-slate-400"></i> ${task.assignee}
+            </span>
+          </td>
+          <td class="p-2.5">
+            <button onclick="cycleTaskStatus(${index})" class="text-[10px] px-2.5 py-0.5 rounded-full ${badgeClass} border border-transparent hover:opacity-80 transition cursor-pointer" title="Durumu değiştirmek için tıkla">
+              ${statusLabel}
+            </button>
+          </td>
+          <td class="p-2.5 text-center no-print">
+            <button onclick="deleteTask(${index})" class="text-slate-400 hover:text-rose-600 transition" title="Görevi Sil">
+              <i class="fa-regular fa-trash-can"></i>
+            </button>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    function toggleQuickTaskForm() {
+      document.getElementById('quickTaskForm').classList.toggle('hidden');
+    }
+
+    function addNewTaskFromForm() {
+      const input = document.getElementById('newTaskTitle');
+      const text = input.value.trim();
+      if (!text) return;
+
+      const assignee = document.getElementById('newTaskAssignee').value;
+      const status = document.getElementById('newTaskStatus').value;
+      const currentWeek = projectState.weeks[projectState.activeWeekKey];
+      if (!currentWeek.tasks) currentWeek.tasks = [];
+
+      currentWeek.tasks.push({ id: Date.now(), text, assignee, status });
+      input.value = '';
+      saveProjectData(true);
+      renderTasksTable();
+      updateDashboardWidgets();
+    }
+
+    function toggleTaskDone(index) {
+      const currentWeek = projectState.weeks[projectState.activeWeekKey];
+      if (!currentWeek.tasks[index]) return;
+      currentWeek.tasks[index].status = currentWeek.tasks[index].status === 'done' ? 'todo' : 'done';
+      saveProjectData(false);
+      renderTasksTable();
+      updateDashboardWidgets();
+    }
+
+    function cycleTaskStatus(index) {
+      const currentWeek = projectState.weeks[projectState.activeWeekKey];
+      if (!currentWeek.tasks[index]) return;
+      const current = currentWeek.tasks[index].status;
+      currentWeek.tasks[index].status = current === 'todo' ? 'doing' : current === 'doing' ? 'done' : 'todo';
+      saveProjectData(false);
+      renderTasksTable();
+      updateDashboardWidgets();
+    }
+
+    function deleteTask(index) {
+      const currentWeek = projectState.weeks[projectState.activeWeekKey];
+      if (!confirm("Bu görevi silmek istediğinize emin misiniz?")) return;
+      currentWeek.tasks.splice(index, 1);
+      saveProjectData(false);
+      renderTasksTable();
+      updateDashboardWidgets();
+    }
+
+    function renderAdvisorTable() {
+      const currentWeek = projectState.weeks[projectState.activeWeekKey];
+      const tbody = document.getElementById('advisorTableBody');
+      tbody.innerHTML = '';
+
+      const roles = {
+        elif: { name: "Elif Basmacı", scope: "TÜBİTAK 2209-A Yürütücüsü", icon: "fa-solid fa-user-shield text-rose-500" },
+        emre: { name: "Emre Özel", scope: "2209-A & Bitirme Ekip Üyesi", icon: "fa-solid fa-user-gear text-blue-500" },
+        tunahan: { name: "Tunahan Dündar", scope: "2209-A & Bitirme Ekip Üyesi", icon: "fa-solid fa-user-pen text-emerald-500" },
+        talha: { name: "Talha Erol", scope: "Bitirme Projesi & Ortak Araştırmacı", icon: "fa-solid fa-user-gear text-amber-500" }
+      };
+
+      for (let key in roles) {
+        const member = roles[key];
+        const data = (currentWeek.members && currentWeek.members[key]) ? currentWeek.members[key] : {};
+
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td class="p-3 font-semibold text-slate-800">
+            <span class="flex items-center gap-1.5">
+              <i class="${member.icon}"></i>
+              <strong>${member.name}</strong>
+            </span>
+            <span class="text-[10px] font-bold text-rose-600 block mt-0.5">${member.scope}</span>
+            <span class="text-[11px] font-normal text-slate-500">${data.role || 'Tanımlanmadı'}</span>
+          </td>
+          <td class="p-3 text-slate-700 whitespace-pre-line leading-relaxed">${data.done || '-'}</td>
+          <td class="p-3 text-slate-700 whitespace-pre-line leading-relaxed">${data.todo || '-'}</td>
+          <td class="p-3 text-amber-700 font-medium">${data.blockers || 'Yok'}</td>
+        `;
+        tbody.appendChild(tr);
+      }
+
+      updateAdvisorReportAdditions();
+    }
+
+    function updateAdvisorReportAdditions() {
+      const budget = projectState.budget || { totalGrant: 9000, expenses: [] };
+      const totalGrant = Number(budget.totalGrant) || 9000;
+      let totalSpent = 0;
+      (budget.expenses || []).forEach(e => { totalSpent += Number(e.amount) || 0; });
+      const remaining = totalGrant - totalSpent;
+      const spentPercent = totalGrant > 0 ? ((totalSpent / totalGrant) * 100).toFixed(1) : 0;
+
+      const remainBadge = document.getElementById('advisorBudgetRemainBadge');
+      if (remainBadge) remainBadge.innerText = `Kalan: ₺${remaining.toLocaleString('tr-TR', { minimumFractionDigits: 2 })}`;
+      
+      const grantEl = document.getElementById('advisorTotalGrant');
+      if (grantEl) grantEl.innerText = `₺${totalGrant.toLocaleString('tr-TR', { minimumFractionDigits: 2 })}`;
+
+      const spentEl = document.getElementById('advisorTotalSpent');
+      if (spentEl) spentEl.innerText = `₺${totalSpent.toLocaleString('tr-TR', { minimumFractionDigits: 2 })}`;
+
+      const percentEl = document.getElementById('advisorSpentPercent');
+      if (percentEl) percentEl.innerText = `%${spentPercent}`;
+
+      const noteEl = document.getElementById('advisorRecentExpenseNote');
+      if (noteEl) {
+        if (budget.expenses && budget.expenses.length > 0) {
+          const lastExp = budget.expenses[budget.expenses.length - 1];
+          noteEl.innerHTML = `<span class="font-semibold text-slate-700">Son Harcama:</span> ${lastExp.item} (₺${Number(lastExp.amount).toLocaleString('tr-TR', { minimumFractionDigits: 2 })}) - ${lastExp.vendor || 'Fatura kayıtlı'}`;
+        } else {
+          noteEl.innerHTML = `<span class="italic text-slate-400">Henüz resmi fatura harcaması yapılmadı.</span>`;
+        }
+      }
+
+      const labs = projectState.labs || [];
+      const labBadge = document.getElementById('advisorLabCountBadge');
+      if (labBadge) labBadge.innerText = `${labs.length} Bölüm Aktif`;
+
+      const labsContainer = document.getElementById('advisorLabsSummaryContainer');
+      if (labsContainer) {
+        labsContainer.innerHTML = '';
+        if (labs.length === 0) {
+          labsContainer.innerHTML = `<p class="italic text-slate-400">Henüz laboratuvar çalışması girilmedi.</p>`;
+        } else {
+          labs.forEach(lab => {
+            const count = lab.rows ? lab.rows.length : 0;
+            const div = document.createElement('div');
+            div.className = "flex items-center justify-between p-2 rounded-lg bg-white border border-slate-200";
+            div.innerHTML = `
+              <div class="truncate mr-2">
+                <span class="font-bold text-slate-800">${lab.title}</span>
+                <span class="text-[10px] text-slate-500 block truncate">${lab.desc || 'Açıklama yok'}</span>
+              </div>
+              <span class="px-2 py-0.5 bg-cyan-50 text-cyan-800 font-bold rounded text-[11px] shrink-0">${count} Ölçüm</span>
+            `;
+            labsContainer.appendChild(div);
+          });
+        }
+      }
+    }
+
+    function generateMeetingAgenda() {
+      const currentWeek = projectState.weeks[projectState.activeWeekKey];
+      if (!currentWeek) return;
+
+      const agendaItems = [];
+      agendaItems.push(`--- ${currentWeek.name || 'Haftalık'} Toplantı Gündemi ---`);
+
+      const blockers = [];
+      const members = currentWeek.members || {};
+      for (let key in members) {
+        if (members[key].blockers && members[key].blockers.trim() !== '') {
+          const name = key === 'elif' ? 'Elif' : key === 'emre' ? 'Emre' : key === 'tunahan' ? 'Tunahan' : 'Talha';
+          blockers.push(`• [Engel] ${name}: ${members[key].blockers.replace(/\n/g, ' ')}`);
+        }
+      }
+      agendaItems.push(blockers.length > 0 ? "1. Karşılaşılan Engeller ve Çözüm Arayışları:\n" + blockers.join('\n') : "1. Ekipte açık bir engel bulunmuyor, takvim kontrolü yapılacak.");
+
+      const openTasks = (currentWeek.tasks || []).filter(t => t.status !== 'done');
+      if (openTasks.length > 0) {
+        const taskLines = openTasks.map(t => `• ${t.text} (${t.assignee}) [${t.status === 'doing' ? 'Devam Ediyor' : 'Beklemede'}]`);
+        agendaItems.push("2. Devam Eden / Bekleyen Görevler Durum Kontrolü:\n" + taskLines.join('\n'));
+      }
+
+      agendaItems.push("3. Satın Alma ve Bütçe: Malzeme tedarikleri, faturalar ve resmi bildirimler.");
+      agendaItems.push("4. Danışman Dr. Saeed Lotfan görüşmesi için ara notların belirlenmesi.");
+
+      document.getElementById('weekDecisionsInput').value = agendaItems.join('\n\n');
+      saveCurrentWeekMeta();
+      alert("Toplantı gündemi mevcut engeller ve açık görevler taranarak otomatik oluşturuldu!");
+    }
+
+    function copyMeetingSummary() {
+      const currentWeek = projectState.weeks[projectState.activeWeekKey];
+      if (!currentWeek) return;
+
+      const members = currentWeek.members || {};
+      let text = `📢 TÜBİTAK 2209-A & Bitirme Projesi - ${currentWeek.name || 'Haftalık Özet'}\n\n`;
+
+      const names = { elif: "Elif", emre: "Emre", tunahan: "Tunahan", talha: "Talha" };
+      for (let k in names) {
+        const m = members[k] || {};
+        text += `👤 ${names[k]}:\n• Yapılan: ${m.done ? m.done.replace(/\n/g, ' ') : 'Belirtilmedi'}\n• Hedef: ${m.todo ? m.todo.replace(/\n/g, ' ') : 'Belirtilmedi'}\n\n`;
+      }
+
+      if (currentWeek.decisions) text += `📝 Kararlar / Notlar:\n${currentWeek.decisions}\n\n`;
+      text += `📅 Bir sonraki toplantı: Çarşamba 14:00. Herkese iyi çalışmalar!`;
+
+      navigator.clipboard.writeText(text).then(() => {
+        alert("Toplantı özeti WhatsApp / E-Posta formatında panoya kopyalandı!");
+      }).catch(() => { alert("Metin kopyalanamadı!"); });
+    }
+
+    function renderBudgetCategoriesSelect(selectedCat = "") {
+      const select = document.getElementById('expCategory');
+      if (!select) return;
+      select.innerHTML = '';
+
+      if (!projectState.budget.categories) projectState.budget.categories = initialProjectState.budget.categories;
+
+      projectState.budget.categories.forEach(cat => {
+        const opt = document.createElement('option');
+        opt.value = cat;
+        opt.innerText = `Kategori: ${cat}`;
+        if (cat === selectedCat) opt.selected = true;
+        select.appendChild(opt);
+      });
+
+      const newOpt = document.createElement('option');
+      newOpt.value = "__ADD_NEW__";
+      newOpt.innerText = "+ Yeni Kategori Ekle...";
+      newOpt.className = "font-bold text-rose-600 bg-rose-50";
+      select.appendChild(newOpt);
+    }
+
+    function onCategorySelectChange(val) {
+      if (val === "__ADD_NEW__") promptAddNewCategory();
+    }
+
+    function promptAddNewCategory() {
+      const newCat = prompt("Eklemek istediğiniz yeni harcama kategorisini yazın:\n(Örn: Laboratuvar Sarf Malzemesi, Yazılım / Lisans vb.)");
+      if (!newCat || newCat.trim() === '') {
+        renderBudgetCategoriesSelect();
+        return;
+      }
+      const cleanCat = newCat.trim();
+      if (!projectState.budget.categories.includes(cleanCat)) {
+        projectState.budget.categories.push(cleanCat);
+        saveProjectData(true);
+      }
+      renderBudgetCategoriesSelect(cleanCat);
+      alert(`"${cleanCat}" kategorisi başarıyla eklendi!`);
+    }
+
+    function renderBudgetModule() {
+      if (!projectState.budget) projectState.budget = initialProjectState.budget;
+
+      const budget = projectState.budget;
+      const totalGrant = Number(budget.totalGrant) || 9000;
+      let totalSpent = 0;
+      const tbody = document.getElementById('budgetExpensesTableBody');
+      tbody.innerHTML = '';
+
+      if (!budget.expenses || budget.expenses.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="8" class="p-4 text-center text-slate-400 italic">Henüz harcama kaydı girilmedi.</td></tr>`;
+      } else {
+        budget.expenses.forEach((exp, index) => {
+          totalSpent += Number(exp.amount) || 0;
+          const tr = document.createElement('tr');
+          tr.className = 'hover:bg-slate-50';
+          tr.innerHTML = `
+            <td class="p-3 font-semibold text-slate-800">${exp.item}</td>
+            <td class="p-3 text-slate-600">${exp.vendor || '-'}</td>
+            <td class="p-3"><span class="px-2 py-0.5 bg-slate-100 rounded text-slate-700 font-medium text-[11px]">${exp.category || 'Genel'}</span></td>
+            <td class="p-3 text-slate-600">${exp.date || '-'}</td>
+            <td class="p-3 font-mono text-[11px] text-slate-500">${exp.invoiceNo || '-'}</td>
+            <td class="p-3 font-bold text-slate-800">₺${Number(exp.amount).toLocaleString('tr-TR', { minimumFractionDigits: 2 })}</td>
+            <td class="p-3 text-center">
+              ${exp.link ? `<a href="${exp.link}" target="_blank" class="text-rose-600 hover:underline"><i class="fa-solid fa-arrow-up-right-from-square"></i></a>` : '<span class="text-slate-300">-</span>'}
+            </td>
+            <td class="p-3 text-center no-print">
+              <div class="flex items-center justify-center gap-2">
+                <button onclick="editExpense(${index})" class="text-slate-400 hover:text-indigo-600 transition" title="Düzenle"><i class="fa-solid fa-pen-to-square"></i></button>
+                <button onclick="deleteExpense(${index})" class="text-slate-400 hover:text-rose-600 transition" title="Sil"><i class="fa-regular fa-trash-can"></i></button>
+              </div>
+            </td>
+          `;
+          tbody.appendChild(tr);
+        });
+      }
+
+      const remaining = totalGrant - totalSpent;
+      const percent = totalGrant > 0 ? ((totalSpent / totalGrant) * 100).toFixed(1) : 0;
+
+      document.getElementById('budgetTotalGrantDisplay').innerText = `₺${totalGrant.toLocaleString('tr-TR', { minimumFractionDigits: 2 })}`;
+      document.getElementById('budgetTotalSpentDisplay').innerText = `₺${totalSpent.toLocaleString('tr-TR', { minimumFractionDigits: 2 })}`;
+      document.getElementById('budgetRemainingDisplay').innerText = `₺${remaining.toLocaleString('tr-TR', { minimumFractionDigits: 2 })}`;
+      document.getElementById('budgetSpentPercent').innerText = `%${percent} kullanıldı`;
+
+      document.getElementById('dash-total-grant').innerText = `₺${totalGrant.toLocaleString('tr-TR', { minimumFractionDigits: 2 })}`;
+      document.getElementById('dash-remaining-budget').innerText = `₺${remaining.toLocaleString('tr-TR', { minimumFractionDigits: 2 })}`;
+    }
+
+    function toggleExpenseForm() {
+      const form = document.getElementById('newExpenseForm');
+      form.classList.toggle('hidden');
+      if (form.classList.contains('hidden')) {
+        document.getElementById('expEditIndex').value = "-1";
+        document.getElementById('expenseFormHeader').innerText = "Yeni Fatura / Harcama Bilgileri:";
+        document.getElementById('expSubmitBtn').innerText = "Kaydet";
+      }
+    }
+
+    function editExpense(index) {
+      const exp = projectState.budget.expenses[index];
+      if (!exp) return;
+
+      document.getElementById('expEditIndex').value = index;
+      document.getElementById('expItem').value = exp.item || '';
+      document.getElementById('expVendor').value = exp.vendor || '';
+      document.getElementById('expDate').value = exp.date || '';
+      document.getElementById('expAmount').value = exp.amount || '';
+      document.getElementById('expInvoiceNo').value = exp.invoiceNo || '';
+      document.getElementById('expDriveLink').value = exp.link || '';
+      renderBudgetCategoriesSelect(exp.category);
+
+      document.getElementById('expenseFormHeader').innerText = "Harcama Kaydını Düzenle:";
+      document.getElementById('expSubmitBtn').innerText = "Güncelle";
+
+      const form = document.getElementById('newExpenseForm');
+      form.classList.remove('hidden');
+      form.scrollIntoView({ behavior: 'smooth' });
+    }
+
+    function addExpenseFromForm() {
+      const item = document.getElementById('expItem').value.trim();
+      const vendor = document.getElementById('expVendor').value.trim();
+      const date = document.getElementById('expDate').value;
+      const amount = parseFloat(document.getElementById('expAmount').value);
+      const invoiceNo = document.getElementById('expInvoiceNo').value.trim();
+      let category = document.getElementById('expCategory').value;
+      if (category === "__ADD_NEW__") category = "Genel";
+      const link = document.getElementById('expDriveLink').value.trim();
+      const editIndex = parseInt(document.getElementById('expEditIndex').value);
+
+      if (!item || isNaN(amount) || amount <= 0) {
+        alert("Lütfen geçerli bir malzeme adı ve harcama tutarı girin!");
+        return;
+      }
+
+      if (!projectState.budget.expenses) projectState.budget.expenses = [];
+      const expenseData = {
+        id: editIndex >= 0 ? projectState.budget.expenses[editIndex].id : Date.now(),
+        item, vendor, date: date || new Date().toISOString().slice(0,10), amount, invoiceNo, category, link
+      };
+
+      if (editIndex >= 0) projectState.budget.expenses[editIndex] = expenseData;
+      else projectState.budget.expenses.push(expenseData);
+
+      document.getElementById('expItem').value = '';
+      document.getElementById('expVendor').value = '';
+      document.getElementById('expAmount').value = '';
+      document.getElementById('expInvoiceNo').value = '';
+      document.getElementById('expDriveLink').value = '';
+      document.getElementById('expEditIndex').value = "-1";
+
+      saveProjectData(true);
+      renderBudgetModule();
+      toggleExpenseForm();
+    }
+
+    function deleteExpense(index) {
+      if (!confirm("Bu harcama kaydını silmek istediğinize emin misiniz?")) return;
+      projectState.budget.expenses.splice(index, 1);
+      saveProjectData(true);
+      renderBudgetModule();
+    }
+
+    function editTotalGrant() {
+      const current = projectState.budget.totalGrant || 9000;
+      const val = prompt("Toplam TÜBİTAK Hibe Tutarını (TL) girin:", current);
+      if (val && !isNaN(val)) {
+        projectState.budget.totalGrant = parseFloat(val);
+        saveProjectData(true);
+        renderBudgetModule();
+      }
+    }
+
+    function renderRoadmapModule() {
+      if (!projectState.roadmap) projectState.roadmap = initialProjectState.roadmap;
+
+      const container = document.getElementById('roadmapItemsContainer');
+      container.innerHTML = '';
+
+      projectState.roadmap.forEach((item, index) => {
+        let badgeColor = item.status === 'doing' ? "bg-indigo-100 text-indigo-800 font-bold" : item.status === 'done' ? "bg-emerald-100 text-emerald-800 font-bold" : "bg-slate-100 text-slate-700";
+        let statusLabel = item.status === 'doing' ? "Devam Ediyor" : item.status === 'done' ? "Tamamlandı" : "Beklemede";
+        const isMilestone = item.code === 'MİLAT';
+        const cardBorder = isMilestone ? 'border-amber-400 bg-amber-50/30' : 'border-slate-200 bg-white';
+
+        const div = document.createElement('div');
+        div.className = `p-4 rounded-xl border ${cardBorder} shadow-sm flex flex-col md:flex-row items-start md:items-center justify-between gap-4 transition hover:border-indigo-300`;
+        div.innerHTML = `
+          <div class="flex items-start gap-3">
+            <div class="w-14 text-center shrink-0">
+              <span class="text-xs font-mono font-bold text-slate-500 block">${item.month}</span>
+              <span class="text-[10px] font-bold px-1.5 py-0.5 rounded ${isMilestone ? 'bg-amber-100 text-amber-800' : 'bg-indigo-50 text-indigo-700'}">${item.code}</span>
+            </div>
+            <div>
+              <div class="flex items-center gap-2">
+                <h4 class="text-sm font-bold text-slate-800">${item.title}</h4>
+                <span class="text-[10px] px-2 py-0.2 rounded-full font-semibold ${item.scope === 'Bitirme Tezi' ? 'bg-amber-100 text-amber-700' : 'bg-slate-100 text-slate-600'}">${item.scope}</span>
+              </div>
+              <p class="text-xs text-slate-600 mt-1 leading-relaxed">${item.desc}</p>
+              <div class="text-[11px] text-slate-400 mt-1 flex items-center gap-2">
+                <i class="fa-regular fa-clock"></i> <span>Tahmini Teslim: ${item.deadline}</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="flex items-center gap-2 shrink-0 no-print self-end md:self-center">
+            <button onclick="editRoadmapItem(${index})" class="p-1.5 text-slate-400 hover:text-indigo-600 rounded transition" title="Aşamayı Düzenle">
+              <i class="fa-solid fa-pen-to-square"></i>
+            </button>
+            <button onclick="cycleRoadmapStatus(${index})" class="text-xs px-3 py-1 rounded-full ${badgeColor} border border-transparent hover:opacity-80 transition cursor-pointer">
+              ${statusLabel}
+            </button>
+          </div>
+        `;
+        container.appendChild(div);
+      });
+    }
+
+    function editRoadmapItem(index) {
+      const item = projectState.roadmap[index];
+      if (!item) return;
+
+      document.getElementById('roadmapEditIndex').value = index;
+      document.getElementById('roadmapEditMonth').value = item.month || '';
+      document.getElementById('roadmapEditCode').value = item.code || '';
+      document.getElementById('roadmapEditTitle').value = item.title || '';
+      document.getElementById('roadmapEditDeadline').value = item.deadline || '';
+      document.getElementById('roadmapEditDesc').value = item.desc || '';
+
+      const container = document.getElementById('roadmapEditContainer');
+      container.classList.remove('hidden');
+      container.scrollIntoView({ behavior: 'smooth' });
+    }
+
+    function closeRoadmapEdit() {
+      document.getElementById('roadmapEditContainer').classList.add('hidden');
+      document.getElementById('roadmapEditIndex').value = "-1";
+    }
+
+    function saveRoadmapItemFromForm() {
+      const index = parseInt(document.getElementById('roadmapEditIndex').value);
+      if (index < 0 || !projectState.roadmap[index]) return;
+
+      projectState.roadmap[index].month = document.getElementById('roadmapEditMonth').value.trim();
+      projectState.roadmap[index].code = document.getElementById('roadmapEditCode').value.trim();
+      projectState.roadmap[index].title = document.getElementById('roadmapEditTitle').value.trim();
+      projectState.roadmap[index].deadline = document.getElementById('roadmapEditDeadline').value.trim();
+      projectState.roadmap[index].desc = document.getElementById('roadmapEditDesc').value.trim();
+
+      saveProjectData(true);
+      renderRoadmapModule();
+      closeRoadmapEdit();
+    }
+
+    function cycleRoadmapStatus(index) {
+      const item = projectState.roadmap[index];
+      item.status = item.status === 'todo' ? 'doing' : item.status === 'doing' ? 'done' : 'todo';
+      saveProjectData(true);
+      renderRoadmapModule();
+    }
+
+    function renderLabsModule() {
+      if (!projectState.labs) projectState.labs = initialProjectState.labs;
+
+      const container = document.getElementById('labsContainer');
+      container.innerHTML = '';
+
+      if (projectState.labs.length === 0) {
+        container.innerHTML = `
+          <div class="text-center p-8 bg-slate-50 border border-dashed border-slate-300 rounded-2xl text-slate-500">
+            <i class="fa-solid fa-flask text-3xl text-slate-300 mb-2"></i>
+            <p class="text-sm">Henüz kayıtlı bir deney veya laboratuvar grubu bulunmuyor.</p>
+            <button onclick="promptAddNewLabSection()" class="mt-3 px-3 py-1.5 bg-cyan-700 text-white rounded-lg text-xs font-bold">
+              + Yeni Bölüm Oluştur
+            </button>
+          </div>
+        `;
+        return;
+      }
+
+      projectState.labs.forEach((lab, labIndex) => {
+        const labDiv = document.createElement('div');
+        labDiv.className = "bg-white border border-slate-200 rounded-2xl shadow-sm overflow-hidden transition";
+
+        const headerDiv = document.createElement('div');
+        headerDiv.className = "p-4 bg-slate-50/80 border-b border-slate-200 flex flex-wrap items-center justify-between gap-3 cursor-pointer select-none hover:bg-slate-100/80 transition";
+        headerDiv.onclick = (e) => {
+          if (e.target.closest('button')) return;
+          toggleLabSectionOpen(labIndex);
+        };
+
+        const rowCount = lab.rows ? lab.rows.length : 0;
+        const iconClass = lab.isOpen ? "fa-chevron-down" : "fa-chevron-right";
+
+        headerDiv.innerHTML = `
+          <div class="flex items-center gap-3">
+            <span class="w-7 h-7 rounded-lg bg-cyan-100 text-cyan-700 flex items-center justify-center text-xs">
+              <i class="fa-solid ${iconClass}"></i>
+            </span>
+            <div>
+              <div class="flex items-center gap-2">
+                <h3 class="text-sm font-bold text-slate-900">${lab.title}</h3>
+                <span class="text-[11px] font-semibold px-2 py-0.5 rounded-full bg-cyan-100 text-cyan-800">${rowCount} Ölçüm</span>
+              </div>
+              <p class="text-xs text-slate-500 mt-0.5">${lab.desc || ''}</p>
+            </div>
+          </div>
+
+          <div class="flex items-center gap-2 no-print">
+            <button onclick="promptEditLabHeader(${labIndex})" class="px-2.5 py-1 text-xs text-slate-600 hover:text-slate-900 bg-white border border-slate-200 rounded-lg font-medium transition" title="Bölüm Adını Düzenle">
+              <i class="fa-solid fa-pen-to-square"></i> Düzenle
+            </button>
+            <button onclick="promptAddColumnToLab(${labIndex})" class="px-2.5 py-1 text-xs text-indigo-700 hover:bg-indigo-50 bg-white border border-indigo-200 rounded-lg font-semibold transition" title="Yeni sütun ekle">
+              <i class="fa-solid fa-table-columns"></i> + Sütun Ekle
+            </button>
+            <button onclick="promptDeleteColumnFromLab(${labIndex})" class="px-2.5 py-1 text-xs text-rose-700 hover:bg-rose-50 bg-white border border-rose-200 rounded-lg font-semibold transition" title="Yanlış eklenen sütunu sil">
+              <i class="fa-solid fa-xmark text-xs"></i> Sütun Sil
+            </button>
+            <button onclick="toggleLabRowForm(${labIndex})" class="px-2.5 py-1 text-xs text-white bg-cyan-700 hover:bg-cyan-600 rounded-lg font-bold transition shadow-sm" title="Yeni ölçüm gir">
+              <i class="fa-solid fa-plus"></i> + Ölçüm Ekle
+            </button>
+            <button onclick="deleteLabSection(${labIndex})" class="p-1.5 text-xs text-slate-400 hover:text-rose-600 transition" title="Bölümü Sil">
+              <i class="fa-regular fa-trash-can"></i>
+            </button>
+          </div>
+        `;
+        labDiv.appendChild(headerDiv);
+
+        if (lab.isOpen) {
+          const contentDiv = document.createElement('div');
+          contentDiv.className = "p-4 space-y-4";
+          contentDiv.innerHTML = `
+            <div id="labForm_${labIndex}" class="hidden bg-slate-50 p-4 rounded-xl border border-slate-200 no-print space-y-3">
+              <div class="flex items-center justify-between pb-1 border-b border-slate-200">
+                <span class="text-xs font-bold text-slate-700" id="labFormTitle_${labIndex}">Yeni Ölçüm Verisi Ekle:</span>
+                <button onclick="toggleLabRowForm(${labIndex})" class="text-xs text-slate-400 hover:text-slate-600"><i class="fa-solid fa-xmark"></i> Kapat</button>
+              </div>
+              <input type="hidden" id="labEditRowId_${labIndex}" value="-1">
+              <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 text-xs" id="labFormInputs_${labIndex}"></div>
+              <div class="flex justify-end gap-2 pt-2">
+                <button onclick="saveLabRowFromForm(${labIndex})" class="px-4 py-2 bg-cyan-700 hover:bg-cyan-600 text-white font-bold rounded-lg text-xs transition">
+                  Kaydet
+                </button>
+              </div>
+            </div>
+
+            <div class="overflow-x-auto border border-slate-200 rounded-xl">
+              <table class="w-full text-left text-xs">
+                <thead class="bg-slate-100 text-slate-700 font-bold border-b border-slate-200">
+                  <tr id="labTableHeader_${labIndex}"></tr>
+                </thead>
+                <tbody id="labTableBody_${labIndex}" class="divide-y divide-slate-100"></tbody>
+              </table>
+            </div>
+          `;
+          labDiv.appendChild(contentDiv);
+        }
+
+        container.appendChild(labDiv);
+        if (lab.isOpen) renderLabTableContent(labIndex);
+      });
+    }
+
+    function toggleLabSectionOpen(labIndex) {
+      if (!projectState.labs[labIndex]) return;
+      projectState.labs[labIndex].isOpen = !projectState.labs[labIndex].isOpen;
+      saveProjectData(false);
+      renderLabsModule();
+    }
+
+    function promptAddNewLabSection() {
+      const title = prompt("Yeni Deney / Laboratuvar Bölümünün Başlığı:\n(Örn: 3. Aerodinamik Testleri veya 4. Akustik Ölçümler)");
+      if (!title || title.trim() === '') return;
+      const desc = prompt("Kısa Açıklama (İsteğe bağlı):", "Deney koşulları, donanımlar ve test hedefleri...");
+
+      projectState.labs.push({
+        id: `lab_${Date.now()}`,
+        title: title.trim(),
+        desc: desc ? desc.trim() : '',
+        isOpen: true,
+        columns: ["Ölçüm No", "Tarih", "Numune / Parça", "Test Koşulu", "Ölçülen Değer", "Gözlemler / Notlar", "Dosya / Link"],
+        rows: []
+      });
+
+      saveProjectData(true);
+      renderLabsModule();
+    }
+
+    function promptEditLabHeader(labIndex) {
+      const lab = projectState.labs[labIndex];
+      if (!lab) return;
+      const newTitle = prompt("Bölüm Başlığını Düzenleyin:", lab.title);
+      if (newTitle && newTitle.trim() !== '') {
+        lab.title = newTitle.trim();
+        const newDesc = prompt("Açıklamayı Düzenleyin:", lab.desc || '');
+        if (newDesc !== null) lab.desc = newDesc.trim();
+        saveProjectData(true);
+        renderLabsModule();
+      }
+    }
+
+    function deleteLabSection(labIndex) {
+      const lab = projectState.labs[labIndex];
+      if (!lab) return;
+      if (!confirm(`"${lab.title}" bölümünü ve içindeki tüm verileri silmek istediğinize emin misiniz?`)) return;
+
+      projectState.labs.splice(labIndex, 1);
+      saveProjectData(true);
+      renderLabsModule();
+    }
+
+    function promptAddColumnToLab(labIndex) {
+      const lab = projectState.labs[labIndex];
+      if (!lab) return;
+
+      const colName = prompt(`"${lab.title}" tablosuna eklenecek yeni sütunun adı:\n(Örn: Sıcaklık (°C), Frekans (Hz), Kuvvet (N) vb.)`);
+      if (!colName || colName.trim() === '') return;
+      const cleanCol = colName.trim();
+      if (lab.columns.includes(cleanCol)) {
+        alert("Bu sütun adı zaten mevcut!");
+        return;
+      }
+
+      lab.columns.push(cleanCol);
+      saveProjectData(true);
+      renderLabsModule();
+      alert(`"${cleanCol}" sütunu başarıyla eklendi!`);
+    }
+
+    function promptDeleteColumnFromLab(labIndex) {
+      const lab = projectState.labs[labIndex];
+      if (!lab || !lab.columns || lab.columns.length === 0) return;
+
+      const colListText = lab.columns.map((c, i) => `${i + 1}. ${c}`).join('\n');
+      const selection = prompt(`Silmek istediğiniz sütunun adını veya numarasını girin:\n\n${colListText}\n\nSilinecek Sütun:`);
+      if (!selection || selection.trim() === '') return;
+
+      let targetCol = selection.trim();
+      const numIdx = parseInt(targetCol, 10);
+      if (!isNaN(numIdx) && numIdx >= 1 && numIdx <= lab.columns.length) {
+        targetCol = lab.columns[numIdx - 1];
+      }
+
+      const colIndex = lab.columns.indexOf(targetCol);
+      if (colIndex === -1) {
+        alert(`"${targetCol}" isimli bir sütun bulunamadı!`);
+        return;
+      }
+
+      if (!confirm(`"${targetCol}" sütununu ve girilmiş değerlerini silmek istediğinize emin misiniz?`)) return;
+
+      lab.columns.splice(colIndex, 1);
+      if (lab.rows && lab.rows.length > 0) {
+        lab.rows.forEach(r => {
+          if (r.values && r.values.hasOwnProperty(targetCol)) delete r.values[targetCol];
+        });
+      }
+
+      saveProjectData(true);
+      renderLabsModule();
+      alert(`"${targetCol}" sütunu başarıyla silindi!`);
+    }
+
+    function toggleLabRowForm(labIndex, editRowIndex = -1) {
+      const formEl = document.getElementById(`labForm_${labIndex}`);
+      if (!formEl) return;
+
+      formEl.classList.toggle('hidden');
+      if (formEl.classList.contains('hidden')) return;
+
+      const lab = projectState.labs[labIndex];
+      const inputsContainer = document.getElementById(`labFormInputs_${labIndex}`);
+      inputsContainer.innerHTML = '';
+
+      document.getElementById(`labEditRowId_${labIndex}`).value = editRowIndex;
+      const isEditing = editRowIndex >= 0;
+      document.getElementById(`labFormTitle_${labIndex}`).innerText = isEditing ? "Ölçüm Verisini Düzenle:" : "Yeni Ölçüm Verisi Ekle:";
+
+      const existingData = isEditing ? (lab.rows[editRowIndex].values || {}) : {};
+
+      lab.columns.forEach(col => {
+        const div = document.createElement('div');
+        div.className = "space-y-1";
+        const val = existingData[col] || '';
+        div.innerHTML = `
+          <label class="block font-bold text-slate-700 text-[11px]">${col}:</label>
+          <input type="text" data-col="${col}" value="${val}" placeholder="${col} girin..." class="w-full p-2 bg-white border border-slate-300 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:outline-none text-xs">
+        `;
+        inputsContainer.appendChild(div);
+      });
+
+      formEl.scrollIntoView({ behavior: 'smooth' });
+    }
+
+    function saveLabRowFromForm(labIndex) {
+      const lab = projectState.labs[labIndex];
+      if (!lab) return;
+
+      const editIndex = parseInt(document.getElementById(`labEditRowId_${labIndex}`).value);
+      const inputs = document.querySelectorAll(`#labFormInputs_${labIndex} input`);
+      const values = {};
+      inputs.forEach(input => {
+        values[input.getAttribute('data-col')] = input.value.trim();
+      });
+
+      if (editIndex >= 0) {
+        lab.rows[editIndex].values = values;
+      } else {
+        if (!lab.rows) lab.rows = [];
+        lab.rows.push({ id: Date.now(), values });
+      }
+
+      saveProjectData(true);
+      renderLabsModule();
+    }
+
+    function editLabRow(labIndex, rowIndex) {
+      toggleLabRowForm(labIndex, rowIndex);
+    }
+
+    function deleteLabRow(labIndex, rowIndex) {
+      const lab = projectState.labs[labIndex];
+      if (!lab) return;
+      if (!confirm("Bu ölçüm satırını silmek istediğinize emin misiniz?")) return;
+      lab.rows.splice(rowIndex, 1);
+      saveProjectData(true);
+      renderLabsModule();
+    }
+
+    function renderLabTableContent(labIndex) {
+      const lab = projectState.labs[labIndex];
+      if (!lab) return;
+
+      const thead = document.getElementById(`labTableHeader_${labIndex}`);
+      thead.innerHTML = '';
+      lab.columns.forEach(col => {
+        const th = document.createElement('th');
+        th.className = "p-3 whitespace-nowrap";
+        th.innerText = col;
+        thead.appendChild(th);
+      });
+
+      const actionTh = document.createElement('th');
+      actionTh.className = "p-3 text-center no-print w-20";
+      actionTh.innerText = "İşlem";
+      thead.appendChild(actionTh);
+
+      const tbody = document.getElementById(`labTableBody_${labIndex}`);
+      tbody.innerHTML = '';
+
+      if (!lab.rows || lab.rows.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="${lab.columns.length + 1}" class="p-4 text-center text-slate-400 italic">Bu bölüme henüz ölçüm kaydı girilmedi.</td></tr>`;
+        return;
+      }
+
+      lab.rows.forEach((row, rowIndex) => {
+        const tr = document.createElement('tr');
+        tr.className = "hover:bg-slate-50";
+
+        lab.columns.forEach(col => {
+          const td = document.createElement('td');
+          td.className = "p-3 text-slate-700 leading-snug";
+          const val = row.values ? (row.values[col] || '-') : '-';
+
+          if (val.startsWith('http://') || val.startsWith('https://')) {
+            td.innerHTML = `<a href="${val}" target="_blank" class="text-cyan-700 hover:underline inline-flex items-center gap-1 font-semibold"><i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i> Bağlantı</a>`;
+          } else {
+            td.innerText = val;
+          }
+          tr.appendChild(td);
+        });
+
+        const actionTd = document.createElement('td');
+        actionTd.className = "p-3 text-center no-print whitespace-nowrap";
+        actionTd.innerHTML = `
+          <div class="flex items-center justify-center gap-2">
+            <button onclick="editLabRow(${labIndex}, ${rowIndex})" class="text-slate-400 hover:text-cyan-700 transition" title="Düzenle"><i class="fa-solid fa-pen-to-square"></i></button>
+            <button onclick="deleteLabRow(${labIndex}, ${rowIndex})" class="text-slate-400 hover:text-rose-600 transition" title="Sil"><i class="fa-regular fa-trash-can"></i></button>
+          </div>
+        `;
+        tr.appendChild(actionTd);
+        tbody.appendChild(tr);
+      });
+    }
+
+    function renderResourcesModule() {
+      if (!projectState.resources) projectState.resources = initialProjectState.resources;
+
+      const container = document.getElementById('resourcesGridContainer');
+      container.innerHTML = '';
+
+      const icons = {
+        "Bulut Depolama": "fa-brands fa-google-drive text-emerald-500",
+        "Kod & Algoritma": "fa-brands fa-github text-slate-800",
+        "CAD & FEM": "fa-solid fa-cube text-blue-500",
+        "Akademik Tez": "fa-solid fa-graduation-cap text-purple-600",
+        "Resmi Sistem": "fa-solid fa-building-columns text-rose-600"
+      };
+
+      projectState.resources.forEach((res, index) => {
+        const iconClass = icons[res.category] || "fa-solid fa-link text-slate-600";
+        const card = document.createElement('div');
+        card.className = "bg-white p-4 rounded-xl border border-slate-200 shadow-sm flex flex-col justify-between hover:border-amber-400 transition space-y-3";
+        card.innerHTML = `
+          <div>
+            <div class="flex items-center justify-between pb-2 border-b border-slate-100">
+              <span class="text-[10px] font-bold uppercase tracking-wider text-slate-500">${res.category}</span>
+              <div class="flex items-center gap-2 no-print">
+                <button onclick="editResource(${index})" class="text-slate-300 hover:text-amber-600 text-xs" title="Düzenle"><i class="fa-solid fa-pen-to-square"></i></button>
+                <button onclick="deleteResource(${index})" class="text-slate-300 hover:text-rose-500 text-xs" title="Sil"><i class="fa-regular fa-trash-can"></i></button>
+              </div>
+            </div>
+            <div class="flex items-center gap-3 mt-3">
+              <div class="w-10 h-10 rounded-xl bg-slate-50 flex items-center justify-center text-xl shrink-0"><i class="${iconClass}"></i></div>
+              <div>
+                <h4 class="text-sm font-bold text-slate-900 leading-tight">${res.title}</h4>
+                <p class="text-xs text-slate-500 mt-1 line-clamp-2">${res.desc || ''}</p>
+              </div>
+            </div>
+          </div>
+          <div class="pt-2">
+            <a href="${res.url}" target="_blank" class="w-full inline-flex items-center justify-center gap-1.5 px-3 py-1.5 bg-slate-50 hover:bg-amber-50 hover:text-amber-800 border border-slate-200 rounded-lg text-xs font-semibold text-slate-700 transition">
+              <span>Bağlantıyı Aç</span>
+              <i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i>
+            </a>
+          </div>
+        `;
+        container.appendChild(card);
+      });
+    }
+
+    function toggleResourceForm() {
+      const form = document.getElementById('newResourceForm');
+      form.classList.toggle('hidden');
+      if (form.classList.contains('hidden')) {
+        document.getElementById('resEditIndex').value = "-1";
+        document.getElementById('resourceFormHeader').innerText = "Yeni Bağlantı / Kaynak Kartı:";
+        document.getElementById('resSubmitBtn').innerText = "Ekle";
+      }
+    }
+
+    function editResource(index) {
+      const res = projectState.resources[index];
+      if (!res) return;
+
+      document.getElementById('resEditIndex').value = index;
+      document.getElementById('resTitle').value = res.title || '';
+      document.getElementById('resCategory').value = res.category || '';
+      document.getElementById('resUrl').value = res.url || '';
+      document.getElementById('resDesc').value = res.desc || '';
+
+      document.getElementById('resourceFormHeader').innerText = "Bağlantıyı Düzenle:";
+      document.getElementById('resSubmitBtn').innerText = "Güncelle";
+
+      const form = document.getElementById('newResourceForm');
+      form.classList.remove('hidden');
+      form.scrollIntoView({ behavior: 'smooth' });
+    }
+
+    function addResourceFromForm() {
+      const title = document.getElementById('resTitle').value.trim();
+      const category = document.getElementById('resCategory').value.trim() || "Genel";
+      const url = document.getElementById('resUrl').value.trim();
+      const desc = document.getElementById('resDesc').value.trim();
+      const editIndex = parseInt(document.getElementById('resEditIndex').value);
+
+      if (!title || !url) {
+        alert("Lütfen başlık ve URL bağlantısını girin!");
+        return;
+      }
+
+      if (!projectState.resources) projectState.resources = [];
+      const resourceData = {
+        id: editIndex >= 0 ? projectState.resources[editIndex].id : Date.now(),
+        title, category, url: url.startsWith('http') ? url : `https://${url}`, desc
+      };
+
+      if (editIndex >= 0) projectState.resources[editIndex] = resourceData;
+      else projectState.resources.push(resourceData);
+
+      document.getElementById('resTitle').value = '';
+      document.getElementById('resCategory').value = '';
+      document.getElementById('resUrl').value = '';
+      document.getElementById('resDesc').value = '';
+      document.getElementById('resEditIndex').value = "-1";
+
+      saveProjectData(true);
+      renderResourcesModule();
+      toggleResourceForm();
+    }
+
+    function deleteResource(index) {
+      if (!confirm("Bu bağlantıyı silmek istediğinize emin misiniz?")) return;
+      projectState.resources.splice(index, 1);
+      saveProjectData(true);
+      renderResourcesModule();
+    }
+
+    function updateDashboardWidgets() {
+      const currentWeek = projectState.weeks[projectState.activeWeekKey];
+      if (!currentWeek) return;
+
+      const tasks = currentWeek.tasks || [];
+      const pending = tasks.filter(t => t.status === 'todo').length;
+      const doing = tasks.filter(t => t.status === 'doing').length;
+
+      document.getElementById('dash-tasks-count').innerText = `${tasks.length} Görev`;
+      document.getElementById('dash-tasks-pending').innerText = `${pending} bekleyen, ${doing} devam eden`;
+    }
+
+    function saveMemberData(memberKey) {
+      const currentWeek = projectState.weeks[projectState.activeWeekKey];
+      if (!currentWeek.members) currentWeek.members = {};
+      if (!currentWeek.members[memberKey]) currentWeek.members[memberKey] = {};
+
+      currentWeek.members[memberKey].role = document.getElementById(`role-${memberKey}`).value;
+      currentWeek.members[memberKey].done = document.getElementById(`done-${memberKey}`).value;
+      currentWeek.members[memberKey].todo = document.getElementById(`todo-${memberKey}`).value;
+      currentWeek.members[memberKey].blockers = document.getElementById(`blockers-${memberKey}`).value;
+      currentWeek.members[memberKey].notes = document.getElementById(`notes-${memberKey}`).value;
+
+      saveProjectData(false);
+      renderDashboardCards();
+      renderAdvisorTable();
+    }
+
+    function saveCurrentWeekMeta() {
+      const currentWeek = projectState.weeks[projectState.activeWeekKey];
+      currentWeek.decisions = document.getElementById('weekDecisionsInput').value;
+      currentWeek.advisorFeedback = document.getElementById('advisorFeedbackInput').value;
+      saveProjectData(false);
+    }
+
+    function saveProjectData(showAlert = false) {
+      localStorage.setItem('tubitak_2209_v9_state', JSON.stringify(projectState));
+      const badge = document.getElementById('saveStatusBadge');
+      badge.style.opacity = "1";
+      setTimeout(() => { badge.style.opacity = "0"; }, 1500);
+
+      if (showAlert) alert("Tüm değişiklikler başarıyla kaydedildi!");
+    }
+
+    function switchTab(tabId) {
+      document.querySelectorAll('.tab-page').forEach(page => page.classList.add('hidden'));
+      document.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.classList.remove('border-rose-600', 'text-rose-600');
+        btn.classList.add('border-transparent', 'text-slate-500');
+      });
+
+      const targetPage = document.getElementById(`tab-${tabId}`);
+      const targetBtn = document.getElementById(`btn-tab-${tabId}`);
+
+      if (targetPage) targetPage.classList.remove('hidden');
+      if (targetBtn) {
+        targetBtn.classList.remove('border-transparent', 'text-slate-500');
+        targetBtn.classList.add('border-rose-600', 'text-rose-600');
+      }
+    }
+
+    function exportJSON() {
+      saveProjectData(false);
+      const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(projectState, null, 2));
+      const downloadAnchor = document.createElement('a');
+      downloadAnchor.setAttribute("href", dataStr);
+      downloadAnchor.setAttribute("download", `tubitak_2209_proje_verisi_${new Date().toISOString().slice(0,10)}.json`);
+      document.body.appendChild(downloadAnchor);
+      downloadAnchor.click();
+      downloadAnchor.remove();
+    }
+
+    function importJSON(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        try {
+          const parsed = JSON.parse(e.target.result);
+          if (parsed && parsed.weeks) {
+            projectState = parsed;
+            saveProjectData(false);
+            renderWeekSelector();
+            loadActiveWeek();
+            renderBudgetCategoriesSelect();
+            renderBudgetModule();
+            renderRoadmapModule();
+            renderLabsModule();
+            renderResourcesModule();
+            alert("Proje yedeği başarıyla yüklendi!");
+          } else { alert("Geçersiz yedek dosyası!"); }
+        } catch(err) { alert("Dosya okunurken bir hata oluştu!"); }
+      };
+      reader.readAsText(file);
+    }
+
+    window.onload = initApp;
+  </script>
+</body>
+</html>
