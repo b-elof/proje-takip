@@ -13,6 +13,10 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
 
+  <!-- Google Firebase Resmi SDK (WebSocket Canlı Eşitleme) -->
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+
   <script>
     tailwind.config = {
       theme: {
@@ -109,7 +113,7 @@
         </div>
       </div>
 
-      <!-- Canlı Bulut Durumu & Aksiyon Butonları -->
+      <!-- Canlı Bulut Durumu & Eylem Butonları -->
       <div class="flex items-center gap-2 no-print">
         <span id="cloudStatusBadge" class="text-[11px] font-semibold px-2.5 py-1 rounded-lg bg-slate-800 border border-slate-700 text-slate-300 flex items-center gap-1.5 transition">
           <span class="w-2 h-2 rounded-full bg-slate-400"></span>
@@ -944,16 +948,26 @@
   </footer>
 
   <!-- ======================================================== -->
-  <!-- JAVASCRIPT: DOĞRUDAN REST API MOTORU (SDK'SIZ GARANTİ)   -->
+  <!-- JAVASCRIPT: GOOGLE FIREBASE RESMİ CANLI SENKRONİZASYON   -->
   <!-- ======================================================== -->
   <script>
-    // Kullanıcının Doğrudan REST API Veritabanı Noktası
-    const FIREBASE_REST_URL = "https://proje-takibi-2dff9-default-rtdb.firebaseio.com/proje.json";
+    // Kullanıcının Resmi Firebase Yapılandırması
+    const firebaseConfig = {
+      apiKey: "AIzaSyD4kLm_-E1fqFaauIu1YWNdZlf6hkTfYB8",
+      authDomain: "proje-takibi-2dff9.firebaseapp.com",
+      databaseURL: "https://proje-takibi-2dff9-default-rtdb.firebaseio.com",
+      projectId: "proje-takibi-2dff9",
+      storageBucket: "proje-takibi-2dff9.firebasestorage.app",
+      messagingSenderId: "408467679513",
+      appId: "1:408467679513:web:bf82f864699006ed58fd88",
+      measurementId: "G-RPGB50F0NQ"
+    };
 
+    let firebaseDb = null;
+    let projectRef = null;
+    let isRemoteUpdate = false;
     let syncDebounceTimer = null;
-    let isSyncing = false;
 
-    // Rozet Durumu Ayarlayıcı
     function setCloudBadge(status, text) {
       const badge = document.getElementById('cloudStatusBadge');
       if (!badge) return;
@@ -969,25 +983,33 @@
       }
     }
 
-    // Buluttan Veri Çekme (REST GET)
-    async function fetchFromCloud(silent = false) {
-      if (isSyncing) return;
+    function initFirebase() {
       try {
-        const response = await fetch(FIREBASE_REST_URL);
-        if (!response.ok) throw new Error("HTTP " + response.status);
-        const remoteData = await response.json();
+        if (!firebase.apps.length) {
+          firebase.initializeApp(firebaseConfig);
+        }
+        firebaseDb = firebase.database();
+        projectRef = firebaseDb.ref("project_state");
 
-        if (remoteData && remoteData.weeks) {
-          const remoteStr = JSON.stringify(remoteData);
-          const localStr = JSON.stringify(projectState);
+        // Canlı WebSocket Bağlantı Kontrolü
+        firebaseDb.ref(".info/connected").on("value", (snap) => {
+          if (snap.val() === true) {
+            setCloudBadge("online", "Canlı Bulut Senkronize");
+          } else {
+            setCloudBadge("offline", "Bağlantı Bekleniyor...");
+          }
+        });
 
-          if (remoteStr !== localStr) {
-            // Kullanıcı bir inputta yazı yazmıyorsa tüm ekranı güncelle
+        // Canlı Çift Yönlü Dinleyici (Ekipteki herkes için)
+        projectRef.on("value", (snapshot) => {
+          const remoteData = snapshot.val();
+          if (remoteData && remoteData.weeks) {
+            isRemoteUpdate = true;
+            projectState = remoteData;
+            localStorage.setItem('tubitak_2209_v9_state', JSON.stringify(projectState));
+
             const activeEl = document.activeElement;
             const isTyping = activeEl && (activeEl.tagName === 'INPUT' || activeEl.tagName === 'TEXTAREA');
-
-            projectState = remoteData;
-            localStorage.setItem('tubitak_2209_v9_state', remoteStr);
 
             if (!isTyping) {
               renderWeekSelector();
@@ -1004,44 +1026,16 @@
               renderAdvisorTable();
               updateDashboardWidgets();
             }
+            setTimeout(() => { isRemoteUpdate = false; }, 200);
+          } else if (remoteData === null) {
+            // Veritabanı ilk kez açıldığında boşsa, şablon verisini gönder
+            projectRef.set(projectState);
           }
-          setCloudBadge("online", "Canlı Bulut Senkronize");
-        } else if (remoteData === null) {
-          // Bulutta henüz hiç veri yoksa ilk veriyi yükle
-          pushToCloud(false);
-        }
-      } catch (err) {
-        console.warn("Bulut okuma:", err);
-        if (!silent) setCloudBadge("offline", "Yerel Mod (Bağlantı Bekleniyor)");
-      }
-    }
-
-    // Buluta Veri Gönderme (REST PUT)
-    async function pushToCloud(showAlert = false) {
-      isSyncing = true;
-      setCloudBadge("syncing", "Buluta Eşitleniyor...");
-      try {
-        const response = await fetch(FIREBASE_REST_URL, {
-          method: 'PUT',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(projectState)
         });
-
-        if (!response.ok) throw new Error("HTTP " + response.status);
-        setCloudBadge("online", "Canlı Bulut Senkronize");
-        if (showAlert) alert("Tüm değişiklikler başarıyla Google Firebase bulutuna eşitlendi!");
       } catch (err) {
-        console.error("Bulut yazma hatası:", err);
-        setCloudBadge("offline", "Kayıt Yerel Bellekte");
-        if (showAlert) alert("Bulut bağlantısı kurulamadı; verileriniz bilgisayarınızın yerel belleğine kaydedildi.");
-      } finally {
-        setTimeout(() => { isSyncing = false; }, 300);
+        console.error("Firebase bağlantı hatası:", err);
+        setCloudBadge("offline", "Yerel Bellek Modu");
       }
-    }
-
-    function triggerManualSync() {
-      saveProjectData(false);
-      pushToCloud(true);
     }
 
     // Başlangıç Veri Modeli
@@ -1212,10 +1206,8 @@
       renderResourcesModule();
       updateDashboardWidgets();
 
-      // Bulut verisini çek ve 3.5 saniyede bir otomatik sorgula (polling)
-      fetchFromCloud(false);
-      setInterval(() => { fetchFromCloud(true); }, 3500);
-      window.addEventListener('focus', () => { fetchFromCloud(true); });
+      // Firebase WebSocket motorunu başlat
+      initFirebase();
     }
 
     function printAdvisorReportDirectly() {
@@ -2436,11 +2428,38 @@
     function saveProjectData(showAlert = false) {
       localStorage.setItem('tubitak_2209_v9_state', JSON.stringify(projectState));
       
-      // Buluta anlık REST yazma (Debounce ile 400ms sonra)
-      clearTimeout(syncDebounceTimer);
-      syncDebounceTimer = setTimeout(() => {
-        pushToCloud(showAlert);
-      }, 400);
+      // Buluta anlık WebSocket yazma
+      if (projectRef && !isRemoteUpdate) {
+        clearTimeout(syncDebounceTimer);
+        setCloudBadge("syncing", "Buluta Kaydediliyor...");
+        syncDebounceTimer = setTimeout(() => {
+          projectRef.set(projectState).then(() => {
+            setCloudBadge("online", "Canlı Bulut Senkronize");
+            if (showAlert) alert("Tüm değişiklikler başarıyla Google Firebase bulutuna eşitlendi!");
+          }).catch((err) => {
+            console.error("Buluta kaydedilemedi:", err);
+            setCloudBadge("offline", "Kayıt Yerel Bellekte");
+          });
+        }, 300);
+      } else if (showAlert) {
+        alert("Değişiklikler kaydedildi!");
+      }
+    }
+
+    function triggerManualSync() {
+      saveProjectData(false);
+      if (projectRef) {
+        setCloudBadge("syncing", "Buluta Eşitleniyor...");
+        projectRef.set(projectState).then(() => {
+          setCloudBadge("online", "Canlı Bulut Senkronize");
+          alert("Tüm proje verileri Google Firebase bulutuna anında eşitlendi!");
+        }).catch((err) => {
+          console.error(err);
+          alert("Bulut senkronizasyonu sırasında hata oluştu. Yerel verileriniz güvende.");
+        });
+      } else {
+        alert("Bulut bağlantısı henüz hazır değil, yerel belleğe kaydedildi.");
+      }
     }
 
     function switchTab(tabId) {
